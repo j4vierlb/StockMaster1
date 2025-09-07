@@ -27,6 +27,8 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Limpiar el formulario al iniciar el componente
+    this.loginForm.reset({ username: '', password: '', remember: false });
     // Verificar si hay credenciales guardadas
     const savedUsername = localStorage.getItem('username');
     const savedPassword = localStorage.getItem('password');
