@@ -1,0 +1,209 @@
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+
+  &.has-error ion-input {
+    --border-color: #d32f2f;
+    box-shadow: 0 0 0 2px #d32f2f33;
+  }
+  &.has-success ion-input {
+    --border-color: #43a047;
+    box-shadow: 0 0 0 2px #43a04733;
+  }
+}
+
+.input-error {
+  color: #ff5252;
+  font-size: 13px;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.input-with-icon {
+  position: relative;
+
+  ion-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
+  }
+
+  ion-input {
+    --padding-start: 45px;
+    --background: rgba(255, 255, 255, 0.1);
+    --color: white;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --border-radius: 8px;
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-width: 1px;
+    --border-style: solid;
+  }
+}
+
+ion-item {
+  --background: transparent;
+  --color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 25px;
+}
+
+ion-checkbox {
+  --border-color: rgba(255, 255, 255, 0.5);
+  --border-width: 1px;
+  --checkmark-color: white;
+  --background-checked: #d32f2f;
+  --border-color-checked: #d32f2f;
+}
+
+.btn-login {
+  --background: linear-gradient(135deg, #810b17 0%, #2a0eba 100%);
+  --border-radius: 8px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  margin-top: 20px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-login.animated {
+  animation: bounceBtn 0.5s;
+}
+
+@keyframes bounceBtn {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.1); }
+  50% { transform: scale(0.95); }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 20px;
+
+  a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      color: #d32f2f;
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .input-with-icon {
+    ion-icon {
+      left: 12px;
+      font-size: 16px;
+    }
+    ion-input {
+      --padding-start: 40px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+    }
+  }
+}
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+  }
+}
+
+.input-with-icon {
+  position: relative;
+
+  ion-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
+  }
+
+  ion-input {
+    --padding-start: 45px;
+    --background: rgba(255, 255, 255, 0.1);
+    --color: white;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --border-radius: 8px;
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-width: 1px;
+    --border-style: solid;
+  }
+}
+
+ion-item {
+  --background: transparent;
+  --color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 25px;
+}
+
+ion-checkbox {
+  --border-color: rgba(255, 255, 255, 0.5);
+  --border-width: 1px;
+  --checkmark-color: white;
+  --background-checked: #d32f2f;
+  --border-color-checked: #d32f2f;
+}
+
+.btn-login {
+  --background: linear-gradient(135deg, #810b17 0%, #2a0eba 100%);
+  --border-radius: 8px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 20px;
+
+  a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      color: #d32f2f;
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .input-with-icon {
+    ion-icon {
+      left: 12px;
+      font-size: 16px;
+    }
+    ion-input {
+      --padding-start: 40px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+    }
+  }
+}
