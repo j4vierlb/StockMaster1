@@ -1,3 +1,4 @@
+// Eliminado bloque duplicado
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,6 +27,13 @@ export class ResetPasswordPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  mostrarMensajeExito() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 5000);
   }
 
   async onSubmit() {
