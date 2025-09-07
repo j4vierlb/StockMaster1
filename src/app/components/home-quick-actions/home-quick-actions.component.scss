@@ -1,0 +1,79 @@
+// Estilos para el componente de acciones rápidas
+.actions-card {
+	margin-bottom: 1.5rem;
+	border-radius: 16px;
+	background: rgba(26, 0, 51, 0.85);
+	box-shadow: 0 8px 32px rgba(58, 28, 113, 0.18);
+	border: 1px solid #3a1c71;
+
+	ion-card-header {
+		padding-bottom: 0;
+	}
+
+	ion-card-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #fff;
+	}
+}
+
+.actions-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.75rem;
+
+	.action-button {
+		margin: 0;
+		--border-radius: 12px;
+		--padding-top: 1rem;
+		--padding-bottom: 1rem;
+		height: auto;
+		min-height: 60px;
+		background: linear-gradient(90deg, #3a1c71 0%, #0072ff 100%);
+		color: #fff;
+		font-weight: 600;
+		letter-spacing: 0.5px;
+
+		ion-icon {
+			font-size: 1.25rem;
+			color: #b39ddb;
+		}
+
+		&:hover {
+			background: linear-gradient(90deg, #0072ff 0%, #3a1c71 100%);
+			color: #fff;
+		}
+	}
+}
+
+@media (max-width: 360px) {
+	.actions-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: 768px) {
+	.actions-grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+.action-button {
+	transition: transform 0.2s ease;
+	animation: fadeInUp 0.6s ease-out;
+
+	&:active {
+		transform: scale(0.98);
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

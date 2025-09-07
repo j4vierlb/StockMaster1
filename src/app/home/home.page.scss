@@ -1,3 +1,32 @@
+// Estilos para el botón de cerrar sesión
+.logout-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2.5rem 0 1.5rem 0;
+}
+
+.logout-button {
+  --background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
+  --color: white;
+  --border-radius: 50px;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  --padding-start: 2rem;
+  --padding-end: 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px rgba(255, 65, 108, 0.15);
+  transition: transform 0.2s;
+}
+.logout-button:hover {
+  --background: linear-gradient(90deg, #ff4b2b 0%, #ff416c 100%);
+  transform: translateY(-2px);
+}
+.logout-button:active {
+  transform: scale(0.98);
+}
+
 // Variables de colores
 $color-primary: #3a1c71;
 $color-secondary: #0072ff;
@@ -10,279 +39,4 @@ $color-white: #fff;
   --background: linear-gradient(135deg, #1a0033 0%, #3a1c71 40%, #0072ff 80%, #000 100%) !important;
   min-height: 100vh;
   display: block;
-}
-
-.welcome-card {
-  background: rgba(26, 0, 51, 0.85);
-  box-shadow: 0 8px 32px rgba(58, 28, 113, 0.18);
-  border: 1px solid #3a1c71;
-  margin-bottom: 1.5rem;
-  border-radius: 16px;
-  
-  ion-card-title {
-    color: #fff !important;
-    text-shadow: 0 2px 8px #3a1c71cc;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-  
-  ion-card-subtitle {
-    color: #f7f6f9 !important;
-    font-weight: 400;
-  }
-  
-  ion-card-content p {
-    color: #ffffff;
-    line-height: 1.6;
-    margin: 0;
-  }
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.metric-card {
-  border-radius: 16px;
-  box-shadow: 0 4px 16px #3a1c7133;
-  background: linear-gradient(120deg, #3a1c71 0%, #0072ff 100%);
-  color: #fff;
-  
-  ion-card-content {
-    padding: 1rem;
-  }
-  
-  .metric-content {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  
-  .metric-icon {
-    font-size: 2rem;
-    background: rgba(179, 157, 219, 0.13);
-    padding: 0.5rem;
-    border-radius: 12px;
-    color: #fff;
-  }
-  
-  .metric-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 0.25rem;
-    text-shadow: 0 2px 8px #3a1c71cc;
-  }
-  
-  .metric-label {
-    font-size: 0.8rem;
-    color: #b39ddb;
-    font-weight: 500;
-  }
-}
-
-.actions-card {
-  margin-bottom: 1.5rem;
-  border-radius: 16px;
-  background: rgba(26, 0, 51, 0.85);
-  box-shadow: 0 8px 32px rgba(58, 28, 113, 0.18);
-  border: 1px solid #3a1c71;
-  
-  ion-card-header {
-    padding-bottom: 0;
-  }
-  
-  ion-card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #fff;
-  }
-}
-
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-  
-  .action-button {
-    margin: 0;
-    --border-radius: 12px;
-    --padding-top: 1rem;
-    --padding-bottom: 1rem;
-    height: auto;
-    min-height: 60px;
-    background: linear-gradient(90deg, #3a1c71 0%, #0072ff 100%);
-    color: #fff;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    
-    ion-icon {
-      font-size: 1.25rem;
-      color: #b39ddb;
-    }
-    
-    &:hover {
-      background: linear-gradient(90deg, #0072ff 0%, #3a1c71 100%);
-      color: #fff;
-    }
-  }
-}
-
-.activities-card {
-  border-radius: 16px;
-  background: rgba(26, 0, 51, 0.85);
-  box-shadow: 0 8px 32px rgba(58, 28, 113, 0.18);
-  border: 1px solid #3a1c71;
-  
-  ion-card-header {
-    padding-bottom: 0;
-  }
-  
-  ion-card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #fff;
-  }
-}
-
-.activities-card ion-list {
-  background: transparent !important;
-}
-
-.activities-card ion-item {
-  --background: transparent !important;
-  background: transparent !important;
-  color: #fff;
-  border-radius: 12px;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 2px 8px #3a1c7133;
-}
-
-.activities-card ion-label h3,
-.activities-card ion-label p,
-.activities-card ion-note {
-  color: #dbdbdb !important;
-}
-
-.activities-card ion-label p {
-  color: #b39ddb !important;
-}
-
-.activities-card ion-note {
-  color: #b39ddb !important;
-}
-
-.activity-item {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  --border-radius: 12px;
-  margin-bottom: 0.5rem;
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
-  
-  .activity-icon {
-    font-size: 1.5rem;
-    margin-right: 0.75rem;
-  }
-  
-  .activity-action {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #fff;
-  }
-  
-  .activity-product {
-    color: #b39ddb;
-    font-size: 0.9rem;
-    margin: 0;
-  }
-  
-  .activity-time {
-    font-size: 0.8rem;
-    color: #b39ddb;
-  }
-}
-
-// Botón de cerrar sesión
-.logout-button {
-  --background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
-  --color: white;
-  --border-radius: 50px;
-  --padding-top: 1rem;
-  --padding-bottom: 1rem;
-  --padding-start: 2rem;
-  --padding-end: 2rem;
-  font-weight: 600;
-  margin: 2rem auto;
-  display: block;
-  width: fit-content;
-  
-  &:hover {
-    --background: linear-gradient(90deg, #ff4b2b 0%, #ff416c 100%);
-    transform: translateY(-2px);
-  }
-  
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-/* Animaciones */
-.metric-card, .actions-card, .activities-card {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 360px) {
-  .metrics-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .actions-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 768px) {
-  .metrics-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .actions-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* Efectos de hover */
-.metric-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.action-button {
-  transition: transform 0.2s ease;
-  
-  &:active {
-    transform: scale(0.98);
-  }
 }

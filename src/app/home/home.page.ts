@@ -86,11 +86,13 @@ export class HomePage implements OnInit {
     });
   }
 
-  doRefresh(event: any) {
+  doRefresh(event?: any) {
     setTimeout(() => {
       // Simular actualización de datos
       this.metrics.totalMovements += 1;
-      event.target.complete();
+      if (event && event.target && event.target.complete) {
+        event.target.complete();
+      }
     }, 1500);
   }
 }

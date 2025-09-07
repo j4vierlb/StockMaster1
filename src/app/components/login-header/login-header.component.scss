@@ -7,17 +7,21 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.header-icon {
+
+.header-logo {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 24px;
-  margin-top: 10px;
+  margin-top: 30px;
 }
-.header-icon ion-icon {
-  font-size: 48px;
+.header-logo ion-icon {
+  font-size: 90px;
   color: #fff;
-  filter: drop-shadow(0 2px 8px #1e90ff88);
+  filter: drop-shadow(0 2px 16px #1e90ff88);
+  background: linear-gradient(135deg, #512da8 60%, #1976d2 100%);
+  border-radius: 24px;
+  padding: 18px;
 }
 
 .login-subtitle {
