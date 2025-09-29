@@ -1,63 +1,62 @@
-<form [formGroup]="loginForm">
-  <div class="input-group" [ngClass]="{'has-error': loginForm.get('username')?.invalid && loginForm.get('username')?.touched, 'has-success': loginForm.get('username')?.valid && loginForm.get('username')?.touched}">
-    <label for="username">Usuario</label>
-    <div class="input-with-icon">
-      <ion-icon name="person" aria-hidden="true"></ion-icon>
-      <ion-input 
-        type="text" 
-        id="username" 
-        placeholder="Ingresa tu usuario"
-        formControlName="username"
-        aria-label="Usuario"
-        required>
-      </ion-input>
-    </div>
-    <div class="input-error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-      El usuario es obligatorio
-    </div>
-  </div>
-  
-  <div class="input-group" [ngClass]="{'has-error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched, 'has-success': loginForm.get('password')?.valid && loginForm.get('password')?.touched}">
-    <label for="password">Contraseña</label>
-    <div class="input-with-icon">
-      <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
-      <ion-input 
-        [type]="showPassword ? 'text' : 'password'" 
-        id="password" 
-        placeholder="Ingresa tu contraseña"
-        formControlName="password"
-        aria-label="Contraseña"
-        required>
-      </ion-input>
-      <ion-icon 
-        [name]="showPassword ? 'eye-off' : 'eye'" 
-        (click)="togglePasswordVisibility()"
-        class="toggle-password"
-        tabindex="0"
-        aria-label="Mostrar u ocultar contraseña"
-        role="button">
-      </ion-icon>
-    </div>
-    <div class="input-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-      La contraseña es obligatoria
-    </div>
-  </div>
-  
-  <ion-item lines="none">
-    <ion-checkbox slot="start" formControlName="remember"></ion-checkbox>
-    <ion-label>Recordarme</ion-label>
-    <div class="forgot-password" slot="end">
-      <a href="#" (click)="goToResetPassword(); $event.preventDefault()">
-        ¿Olvidaste tu contraseña?
-      </a>
-    </div>
+<form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+  <ion-item lines="none" class="form-item">
+    <ion-input
+      formControlName="username"
+      type="text"
+      placeholder="Usuario"
+      class="custom-input"
+      [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+    </ion-input>
   </ion-item>
-  
-  <ion-button 
-    expand="block" 
-    class="btn-login" 
-    (click)="login()" 
-    [disabled]="!loginForm.valid">
-    INICIAR SESIÓN
+  <div class="error-message" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+    <span *ngIf="loginForm.get('username')?.errors?.['required']">El usuario es requerido</span>
+    <span *ngIf="loginForm.get('username')?.errors?.['minlength']">Mínimo 3 caracteres</span>
+  </div>
+
+  <ion-item lines="none" class="form-item">
+    <ion-input
+      formControlName="password"
+      [type]="showPassword ? 'text' : 'password'"
+      placeholder="Contraseña"
+      class="custom-input"
+      [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+    </ion-input>
+    <ion-button
+      fill="clear"
+      slot="end"
+      (click)="togglePasswordVisibility()"
+      class="password-toggle">
+      <ion-icon [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+    <span *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es requerida</span>
+    <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mínimo 4 caracteres</span>
+  </div>
+
+  <ion-item lines="none" class="checkbox-item">
+    <ion-checkbox formControlName="remember" slot="start"></ion-checkbox>
+    <ion-label>Recordarme</ion-label>
+  </ion-item>
+
+  <ion-button
+    expand="block"
+    type="submit"
+    class="login-button"
+    [disabled]="!loginForm.valid"
+    (click)="login()">
+    Iniciar Sesión
   </ion-button>
+
+  <div class="forgot-password">
+    <ion-button fill="clear" (click)="navigateToResetPassword()" class="forgot-password-btn">
+      ¿Olvidaste tu contraseña?
+    </ion-button>
+  </div>
+
+  <div class="auth-links">
+    <ion-button fill="clear" (click)="navigateToRegister()">
+      ¿No tienes cuenta? Regístrate
+    </ion-button>
+  </div>
 </form>

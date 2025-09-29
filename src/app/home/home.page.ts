@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimationController } from '@ionic/angular';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -10,44 +11,92 @@ import { AnimationController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
   logout() {
-    // Limpiar datos de usuario si es necesario
-    localStorage.removeItem('username');
-    localStorage.removeItem('password');
+    // Usar el servicio para cerrar sesión
+    this.storageService.logout();
     // Navegar al login
     this.router.navigate(['/login']);
   }
+  
   userName: string = 'Usuario';
+  userRole: string = '';
+  userInventory: any[] = [];
+  isAdmin: boolean = false;
   
   metrics = {
-    totalProducts: 125,
-    lowStock: 8,
-    inventoryValue: 25480,
-    totalMovements: 42
+    totalProducts: 0,
+    lowStock: 0,
+    inventoryValue: 0,
+    totalMovements: 0
   };
 
   quickActions = [
     { title: 'Productos', icon: 'cube-outline', route: '/products', color: 'primary' },
-    { title: 'Movimientos', icon: 'swap-horizontal-outline', route: '/movements', color: 'secondary' },
-    { title: 'Reportes', icon: 'document-text-outline', route: '/reports', color: 'tertiary' },
+    { title: 'Categorías', icon: 'pricetag-outline', route: '/categories', color: 'secondary' },
+    { title: 'Movimientos', icon: 'swap-horizontal-outline', route: '/movements', color: 'tertiary' },
     { title: 'Ajustes', icon: 'settings-outline', route: '/settings', color: 'success' }
   ];
 
-  recentActivities = [
-    { action: 'Entrada de stock', product: 'Monitor LED 24"', quantity: 5, time: 'Hace 2 horas', icon: 'arrow-down-circle', color: 'success' },
-    { action: 'Salida de stock', product: 'Teclado Mecánico', quantity: 2, time: 'Hace 5 horas', icon: 'arrow-up-circle', color: 'danger' },
-    { action: 'Producto agregado', product: 'Mouse Inalámbrico', quantity: 10, time: 'Ayer', icon: 'add-circle', color: 'primary' },
-    { action: 'Stock bajo', product: 'Impresora Láser', quantity: 2, time: 'Hace 3 días', icon: 'warning', color: 'warning' }
-  ];
+  recentActivities: any[] = [];
 
   constructor(
     private router: Router,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
+    private storageService: StorageService
   ) { }
 
   ngOnInit() {
-    // Simular obtención del nombre de usuario
+    // La verificación se hace en ionViewWillEnter
+  }
+
+  ionViewWillEnter() {
+    console.log('=== Entrando al Home ==='); // Debug
+    console.log('✅ Guard validó sesión, cargando datos del usuario'); // Debug
+    this.loadUserData();
+  }
+
+  private loadUserData() {
+    // Obtener datos del usuario desde localStorage
+    const userData = this.storageService.getUserData();
+    if (userData) {
+      this.userName = userData.name || userData.username;
+      this.userRole = userData.role || 'Usuario';
+      this.isAdmin = userData.username === 'admin';
+      
+      // Cargar inventario específico del usuario
+      this.userInventory = this.storageService.getUserInventory(userData.id);
+      
+      // Cargar actividades específicas del usuario
+      this.recentActivities = this.storageService.getUserActivities(userData.id);
+      
+      // Si no hay actividades, usar algunas por defecto específicas del admin
+      if (this.recentActivities.length === 0 && userData.username === 'admin') {
+        this.recentActivities = [
+          { action: 'Entrada de stock', product: 'Monitor LG 24"', quantity: 10, time: 'Hace 2 horas', icon: 'arrow-down-circle', color: 'success' },
+          { action: 'Producto actualizado', product: 'Teclado Mecánico', quantity: 0, time: 'Hace 5 horas', icon: 'create', color: 'warning' },
+          { action: 'Nuevo producto', product: 'Mouse Inalámbrico', quantity: 15, time: 'Ayer', icon: 'add-circle', color: 'primary' }
+        ];
+      }
+      
+      // Calcular métricas basadas en el inventario del usuario
+      this.calculateMetrics();
+    }
+  }
+
+  goToAdmin() {
+    console.log('🔄 Botón Admin presionado - Navegando a panel');
+    this.router.navigate(['/admin']);
+  }
+
+  private calculateMetrics() {
+    if (this.userInventory.length > 0) {
+      this.metrics.totalProducts = this.userInventory.length;
+      this.metrics.lowStock = this.userInventory.filter(item => item.stock < 10).length;
+      this.metrics.inventoryValue = this.userInventory.reduce((total, item) => total + (item.price * item.stock), 0);
+      this.metrics.totalMovements = Math.floor(Math.random() * 50) + 20; // Simulado por ahora
+    }
+    
+    // Animar elementos después de calcular métricas
     setTimeout(() => {
-      this.userName = 'Carlos Rodríguez';
       this.animateElements();
     }, 500);
   }
@@ -94,5 +143,31 @@ export class HomePage implements OnInit {
         event.target.complete();
       }
     }, 1500);
+  }
+
+  // Nuevas funciones para el header mejorado
+  getGreeting(): string {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return 'Buenos días';
+    } else if (hour < 18) {
+      return 'Buenas tardes';
+    } else {
+      return 'Buenas noches';
+    }
+  }
+
+  getUserInitials(): string {
+    return this.userName
+      .split(' ')
+      .map(name => name.charAt(0))
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  }
+
+  showNotifications() {
+    // Implementar lógica de notificaciones
+    console.log('Mostrar notificaciones');
   }
 }

@@ -1,42 +1,342 @@
-// Estilos para el botón de cerrar sesión
+@import '../../theme/variables.scss';
+
+@include stockmaster-theme;
+
+// Animaciones modernas
+@keyframes slideInFromBottom {
+  0% { 
+    opacity: 0; 
+    transform: translateY(100px) scale(0.9); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+@keyframes floatingAnimation {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+}
+
+// Fondo principal con patrón geométrico
+ion-content {
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  --padding-start: 0px;
+  --padding-end: 0px;
+  
+  --background: transparent;
+}
+
+.home-content {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+}
+
+// Contenedor principal de la página
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+// Header moderno con glassmorphism
+.dashboard-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  
+  animation: slideInFromBottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  .welcome-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .welcome-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Dashboard grid moderno
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  flex: 1;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Tarjetas del dashboard con glassmorphism
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: slideInFromBottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      rgba(59, 130, 246, 0.8), 
+      rgba(147, 51, 234, 0.8), 
+      rgba(236, 72, 153, 0.8)
+    );
+    border-radius: 25px 25px 0 0;
+  }
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.15),
+      0 8px 32px rgba(59, 130, 246, 0.1);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.2) 0%, 
+        rgba(147, 51, 234, 0.2) 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      animation: floatingAnimation 4s ease-in-out infinite;
+      
+      ion-icon {
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  .card-content {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+  }
+}
+
+// Logout button moderno
 .logout-section {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 2.5rem 0 1.5rem 0;
 }
 
 .logout-button {
-  --background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
-  --color: white;
-  --border-radius: 50px;
-  --padding-top: 1rem;
-  --padding-bottom: 1rem;
-  --padding-start: 2rem;
-  --padding-end: 2rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease infinite;
+  
+  border: none;
+  border-radius: 20px;
+  padding: 15px 40px;
+  
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  box-shadow: 
+    0 8px 25px rgba(239, 68, 68, 0.3),
+    0 2px 10px rgba(220, 38, 38, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+      0 12px 35px rgba(239, 68, 68, 0.4),
+      0 4px 15px rgba(220, 38, 38, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .page-container {
+    padding: 0.75rem;
+  }
+  
+  .dashboard-header {
+    padding: 1.5rem;
+    
+    .welcome-title {
+      font-size: 1.6rem;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .dashboard-card {
+    padding: 1.5rem;
+    
+    .card-header {
+      .card-icon {
+        width: 40px;
+        height: 40px;
+        
+        ion-icon {
+          font-size: 1.2rem;
+        }
+      }
+      
+      .card-title {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .logout-button {
+    padding: 12px 30px;
+    font-size: 0.9rem;
+  }
+}
+
+// Botón de admin
+.admin-button {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease infinite;
+  
+  border: none;
+  border-radius: 15px;
+  padding: 12px 20px;
+  width: 100%;
+  
+  font-size: 0.95rem;
   font-weight: 600;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 16px rgba(255, 65, 108, 0.15);
-  transition: transform 0.2s;
-}
-.logout-button:hover {
-  --background: linear-gradient(90deg, #ff4b2b 0%, #ff416c 100%);
-  transform: translateY(-2px);
-}
-.logout-button:active {
-  transform: scale(0.98);
-}
-
-// Variables de colores
-$color-primary: #3a1c71;
-$color-secondary: #0072ff;
-$color-background: #1a0033;
-$color-light: #b39ddb;
-$color-white: #fff;
-
-// Fondo degradado morado, azul y negro para el home
-:host, ion-content {
-  --background: linear-gradient(135deg, #1a0033 0%, #3a1c71 40%, #0072ff 80%, #000 100%) !important;
-  min-height: 100vh;
-  display: block;
+  color: white;
+  letter-spacing: 0.3px;
+  
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  box-shadow: 
+    0 6px 20px rgba(245, 158, 11, 0.25),
+    0 2px 8px rgba(217, 119, 6, 0.15);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 25px rgba(245, 158, 11, 0.35),
+      0 3px 12px rgba(217, 119, 6, 0.25);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }

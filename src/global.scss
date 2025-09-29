@@ -7,6 +7,43 @@ ion-content {
 	--background: transparent !important;
 	background: transparent !important;
 }
+
+// Eliminar efectos ripple/liquid globalmente
+ion-button,
+button,
+.clickable,
+[button] {
+	--ripple-color: transparent !important;
+	--border-style: none !important;
+}
+
+ion-button::part(native) {
+	--ripple-color: transparent !important;
+}
+
+// Optimizaciones de performance global
+* {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-perspective: 1000;
+	perspective: 1000;
+}
+
+// Optimización de scroll en móviles
+ion-content {
+	-webkit-overflow-scrolling: touch;
+}
+
+// Optimización de hardware acceleration
+.metric-card,
+.action-button,
+.activities-card,
+.login-container,
+.register-container {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	-webkit-font-smoothing: antialiased;
+}
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------

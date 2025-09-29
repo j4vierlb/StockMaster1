@@ -3,11 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { LoginLogoComponent } from './login-logo/login-logo.component';
-import { LoginHeaderComponent } from './login-header/login-header.component';
+import { HeaderComponent } from './header/header.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { LoginFooterComponent } from './login-footer/login-footer.component';
-import { HomeHeaderComponent } from './home-header/home-header.component';
 import { HomeMetricsComponent } from './home-metrics/home-metrics.component';
 import { HomeQuickActionsComponent } from './home-quick-actions/home-quick-actions.component';
 import { HomeRecentActivitiesComponent } from './home-recent-activities/home-recent-activities.component';
@@ -16,11 +14,9 @@ import { ResetPasswordSuccessComponent } from './reset-password-success/reset-pa
 
 @NgModule({
   declarations: [
-    LoginLogoComponent,
-    LoginHeaderComponent,
+    HeaderComponent,
     LoginFormComponent,
     LoginFooterComponent,
-    HomeHeaderComponent,
     HomeMetricsComponent,
     HomeQuickActionsComponent,
   HomeRecentActivitiesComponent,
@@ -29,11 +25,9 @@ import { ResetPasswordSuccessComponent } from './reset-password-success/reset-pa
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule],
   exports: [
-    LoginLogoComponent,
-    LoginHeaderComponent,
+    HeaderComponent,
     LoginFormComponent,
     LoginFooterComponent,
-    HomeHeaderComponent,
     HomeMetricsComponent,
     HomeQuickActionsComponent,
   HomeRecentActivitiesComponent,

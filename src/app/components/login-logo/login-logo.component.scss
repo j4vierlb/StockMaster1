@@ -1,46 +1,6 @@
 .logo {
-  text-align: center;
-  margin-bottom: 25px;
-
-  ion-icon {
-    font-size: 50px;
-    color: #d32f2f;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    margin-bottom: 20px;
-    ion-icon {
-      font-size: 40px;
-      padding: 12px;
-    }
-  }
-}
-.logo {
-  text-align: center;
-  margin-bottom: 25px;
-
-  ion-icon {
-    font-size: 50px;
-    color: #d32f2f;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    margin-bottom: 20px;
-    ion-icon {
-      font-size: 40px;
-      padding: 12px;
-    }
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
 }

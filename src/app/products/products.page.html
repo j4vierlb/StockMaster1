@@ -1,0 +1,172 @@
+<ion-header class="glass-header">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()" class="back-button">
+        <ion-icon name="arrow-back-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="page-title">
+      <ion-icon name="cube-outline" class="title-icon"></ion-icon>
+      Productos
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addProduct()" class="add-button">
+        <ion-icon name="add-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="glass-content">
+  <!-- Sección de búsqueda y filtros -->
+  <div class="search-section">
+    <ion-card class="search-card">
+      <ion-card-content>
+        <div class="search-container">
+          <ion-searchbar 
+            [(ngModel)]="searchTerm" 
+            (ionInput)="filterProducts()"
+            placeholder="Buscar productos..."
+            show-clear-button="focus"
+            class="glass-searchbar">
+          </ion-searchbar>
+          
+          <ion-select 
+            [(ngModel)]="selectedCategory" 
+            (ionChange)="filterProducts()"
+            interface="popover"
+            placeholder="Categoría"
+            class="category-filter">
+            <ion-select-option *ngFor="let category of categories" [value]="category.value">
+              {{ category.label }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Stats rápidas -->
+  <div class="stats-section">
+    <ion-card class="stats-card">
+      <ion-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">{{ filteredProducts.length }}</div>
+            <div class="stat-label">Productos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ getLowStockCount() }}</div>
+            <div class="stat-label">Bajo Stock</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ getInventoryValue() | currency:'CLP':'symbol':'1.0-0' }}</div>
+            <div class="stat-label">Valor Total</div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="products-section">
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando productos...</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredProducts.length === 0" class="empty-state">
+      <ion-card class="empty-card">
+        <ion-card-content>
+          <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
+          <h3>No hay productos</h3>
+          <p *ngIf="searchTerm">No se encontraron productos que coincidan con tu búsqueda.</p>
+          <p *ngIf="!searchTerm">Comienza agregando tu primer producto al inventario.</p>
+          <ion-button (click)="addProduct()" color="primary" class="add-first-button">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Agregar Producto
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngIf="!isLoading && filteredProducts.length > 0" class="products-list">
+      <ion-card *ngFor="let product of filteredProducts" class="product-card">
+        <ion-card-content>
+          <div class="product-header">
+            <div class="product-info">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-category">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                {{ product.category }}
+              </p>
+            </div>
+            <div class="product-actions">
+              <ion-button fill="clear" size="small" (click)="editProduct(product)" color="primary">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" (click)="deleteProduct(product)" color="danger">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <div class="product-details">
+            <div class="detail-row">
+              <div class="detail-item">
+                <ion-icon name="cube-outline" class="detail-icon"></ion-icon>
+                <div class="detail-info">
+                  <span class="detail-label">Stock</span>
+                  <span class="detail-value stock-value" [class]="product.stock < 10 ? 'low-stock' : 'normal-stock'">
+                    {{ product.stock }} unidades
+                  </span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <ion-icon name="cash-outline" class="detail-icon"></ion-icon>
+                <div class="detail-info">
+                  <span class="detail-label">Precio</span>
+                  <span class="detail-value">{{ formatCurrency(product.price) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-item">
+                <ion-icon name="location-outline" class="detail-icon"></ion-icon>
+                <div class="detail-info">
+                  <span class="detail-label">Ubicación</span>
+                  <span class="detail-value">{{ product.location }}</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <ion-badge [color]="getStatusColor(product.status)" class="status-badge">
+                  {{ product.status }}
+                </ion-badge>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-item full-width">
+                <ion-icon name="calculator-outline" class="detail-icon"></ion-icon>
+                <div class="detail-info">
+                  <span class="detail-label">Valor Total</span>
+                  <span class="detail-value total-value">{{ formatCurrency(product.price * product.stock) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Botón flotante para agregar -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addProduct()" color="primary" class="glass-fab">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
