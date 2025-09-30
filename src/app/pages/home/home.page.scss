@@ -1,4 +1,4 @@
-@import '../../theme/variables.scss';
+@import '../../../theme/variables.scss';
 
 @include stockmaster-theme;
 
@@ -76,7 +76,7 @@ ion-content {
 }
 
 // Header moderno con glassmorphism
-.dashboard-header {
+.home-header {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(40px);
   border-radius: 25px;
@@ -114,8 +114,8 @@ ion-content {
   }
 }
 
-// Dashboard grid moderno
-.dashboard-grid {
+// Home grid moderno
+.home-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
@@ -131,8 +131,8 @@ ion-content {
   }
 }
 
-// Tarjetas del dashboard con glassmorphism
-.dashboard-card {
+// Tarjetas del home con glassmorphism
+.home-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(40px);
   border-radius: 25px;
@@ -265,7 +265,7 @@ ion-content {
     padding: 0.75rem;
   }
   
-  .dashboard-header {
+  .home-header {
     padding: 1.5rem;
     
     .welcome-title {
@@ -277,7 +277,7 @@ ion-content {
     }
   }
   
-  .dashboard-card {
+  .home-card {
     padding: 1.5rem;
     
     .card-header {

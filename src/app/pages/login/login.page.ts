@@ -2,7 +2,7 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +29,9 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    // Limpiar el formulario cada vez que se entra a la página
+    this.clearLoginForm();
+    
     // Verificar si ya hay sesión activa
     if (this.storageService.isLoggedIn()) {
       const userData = this.storageService.getUserData();
@@ -47,6 +50,20 @@ export class LoginPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(4)]],
       rememberMe: [false]
     });
+  }
+
+  // Método para limpiar el formulario de login
+  private clearLoginForm() {
+    if (this.loginForm) {
+      this.loginForm.reset({
+        username: '',
+        password: '',
+        rememberMe: false
+      });
+      // También limpiar cualquier estado de validación
+      this.loginForm.markAsUntouched();
+      this.loginForm.markAsPristine();
+    }
   }
 
   togglePasswordVisibility() {
@@ -112,6 +129,9 @@ export class LoginPage implements OnInit {
     
     // Si no es usuario predefinido ni registrado, mostrar error
     if (!isValidPredefinedUser && !registeredUser) {
+      // Limpiar contraseña por seguridad en caso de error
+      this.loginForm.patchValue({ password: '' });
+      
       const alert = await this.alertController.create({
         header: '❌ Error de Autenticación',
         message: 'Usuario o contraseña incorrectos. Por favor, verifica tus credenciales.',
@@ -143,6 +163,9 @@ export class LoginPage implements OnInit {
       
       // Generar inventario específico para el usuario
       this.generateUserData(userData);
+      
+      // Limpiar formulario después del login exitoso
+      this.clearLoginForm();
       
       // Mostrar mensaje de éxito
       const successAlert = await this.alertController.create({

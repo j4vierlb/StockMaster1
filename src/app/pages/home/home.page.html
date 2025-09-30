@@ -1,8 +1,8 @@
 <ion-content [fullscreen]="true" class="home-content">
   <div class="page-container">
     
-    <!-- Dashboard Header Mejorado -->
-    <div class="dashboard-header">
+    <!-- Home Header Mejorado -->
+    <div class="home-header">
       <div class="header-content">
         <div class="welcome-section">
           <div class="greeting-time">{{ getGreeting() }}</div>
@@ -21,11 +21,11 @@
       </div>
     </div>
 
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
+    <!-- Home Grid -->
+    <div class="home-grid">
       
       <!-- Metrics Card -->
-      <div class="dashboard-card">
+      <div class="home-card">
         <div class="card-header">
           <div class="card-icon">
             <ion-icon name="analytics-outline"></ion-icon>
@@ -38,7 +38,7 @@
       </div>
       
       <!-- Quick Actions Card -->
-      <div class="dashboard-card">
+      <div class="home-card">
         <div class="card-header">
           <div class="card-icon">
             <ion-icon name="flash-outline"></ion-icon>
@@ -51,7 +51,7 @@
       </div>
       
       <!-- Recent Activities Card -->
-      <div class="dashboard-card">
+      <div class="home-card">
         <div class="card-header">
           <div class="card-icon">
             <ion-icon name="time-outline"></ion-icon>
@@ -66,7 +66,7 @@
     </div>
 
     <!-- Admin Actions (if admin) -->
-    <div *ngIf="isAdmin" class="dashboard-card" style="margin-top: 2rem;">
+    <div *ngIf="isAdmin" class="home-card" style="margin-top: 2rem;">
       <div class="card-header">
         <div class="card-icon">
           <ion-icon name="settings-outline"></ion-icon>

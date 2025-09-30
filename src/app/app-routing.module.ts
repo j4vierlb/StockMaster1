@@ -11,45 +11,40 @@ const routes: Routes = [
   // Páginas de acceso/autenticación
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   },
   {
     path: 'reset-password',
-    loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
+    loadChildren: () => import('./pages/reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule),
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule),
     canActivate: [AuthGuard]
   },
   // Páginas principales de la aplicación
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'products',
-    loadChildren: () => import('./products/products.module').then( m => m.ProductsPageModule),
+    loadChildren: () => import('./pages/products/products.module').then( m => m.ProductsPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'categories',
-    loadChildren: () => import('./categories/categories.module').then( m => m.CategoriesPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'categories',
-    loadChildren: () => import('./categories/categories.module').then( m => m.CategoriesPageModule),
+    loadChildren: () => import('./pages/categories/categories.module').then( m => m.CategoriesPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'movements',
-    loadChildren: () => import('./movements/movements.module').then( m => m.MovementsPageModule),
+    loadChildren: () => import('./pages/movements/movements.module').then( m => m.MovementsPageModule),
     canActivate: [AuthGuard]
   },
 ];
