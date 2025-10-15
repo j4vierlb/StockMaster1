@@ -289,7 +289,7 @@ export class LoginFormComponent implements OnInit {
         { id: 4, name: 'Teclado Inalámbrico', category: 'Accesorios', stock: 15, price: 45.99, location: 'B-015', status: 'Disponible' }
       ];
     } else {
-      // Inventario para empleados/gerentes registrados
+      // Inventario para usuarios registrados
       defaultInventory = [
         { id: 1, name: 'Cuaderno A4', category: 'Oficina', stock: 50, price: 5.99, location: 'C-001', status: 'Disponible' },
         { id: 2, name: 'Bolígrafo Azul', category: 'Oficina', stock: 100, price: 1.50, location: 'C-005', status: 'Disponible' },

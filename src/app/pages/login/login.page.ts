@@ -98,8 +98,7 @@ export class LoginPage implements OnInit {
     const cleanUsername = username?.trim();
     const cleanPassword = password?.trim();
     
-    console.log('🔐 Datos de login originales:', { username, password });
-    console.log('🔐 Datos de login limpiados:', { cleanUsername, cleanPassword });
+    console.log('🔐 Datos de login:', { cleanUsername, cleanPassword });
     
     // Usuarios predefinidos del sistema
     const validUsers: { [key: string]: string } = {
@@ -122,10 +121,6 @@ export class LoginPage implements OnInit {
                                  validUsers[cleanUsername.toLowerCase()] === cleanPassword;
     
     console.log('🔐 Es usuario predefinido válido:', isValidPredefinedUser);
-    console.log('🔐 Username en lowercase:', cleanUsername.toLowerCase());
-    console.log('🔐 Password esperada:', validUsers[cleanUsername.toLowerCase()]);
-    console.log('🔐 Password recibida:', cleanPassword);
-    console.log('🔐 Passwords coinciden:', validUsers[cleanUsername.toLowerCase()] === cleanPassword);
     
     // Si no es usuario predefinido ni registrado, mostrar error
     if (!isValidPredefinedUser && !registeredUser) {
@@ -212,7 +207,7 @@ export class LoginPage implements OnInit {
       username: username,
       name: username.charAt(0).toUpperCase() + username.slice(1),
       email: `${username}@example.com`,
-      role: 'employee',
+      role: 'user',
       loginTime: new Date().toISOString()
     };
   }

@@ -16,11 +16,16 @@ export class HomePage implements OnInit {
     // Navegar al login
     this.router.navigate(['/login']);
   }
+
+  goToAdvancedFeatures() {
+    console.log('🔧 Accediendo a funcionalidades avanzadas...');
+    console.log('❌ Redirigiendo a página 404');
+    this.router.navigate(['/not-found']);
+  }
   
   userName: string = 'Usuario';
   userRole: string = '';
   userInventory: any[] = [];
-  isAdmin: boolean = false;
   
   metrics = {
     totalProducts: 0,
@@ -60,7 +65,6 @@ export class HomePage implements OnInit {
     if (userData) {
       this.userName = userData.name || userData.username;
       this.userRole = userData.role || 'Usuario';
-      this.isAdmin = userData.username === 'admin';
       
       // Cargar inventario específico del usuario
       this.userInventory = this.storageService.getUserInventory(userData.id);
@@ -68,8 +72,8 @@ export class HomePage implements OnInit {
       // Cargar actividades específicas del usuario
       this.recentActivities = this.storageService.getUserActivities(userData.id);
       
-      // Si no hay actividades, usar algunas por defecto específicas del admin
-      if (this.recentActivities.length === 0 && userData.username === 'admin') {
+      // Si no hay actividades, usar algunas por defecto
+      if (this.recentActivities.length === 0) {
         this.recentActivities = [
           { action: 'Entrada de stock', product: 'Monitor LG 24"', quantity: 10, time: 'Hace 2 horas', icon: 'arrow-down-circle', color: 'success' },
           { action: 'Producto actualizado', product: 'Teclado Mecánico', quantity: 0, time: 'Hace 5 horas', icon: 'create', color: 'warning' },
@@ -80,11 +84,6 @@ export class HomePage implements OnInit {
       // Calcular métricas basadas en el inventario del usuario
       this.calculateMetrics();
     }
-  }
-
-  goToAdmin() {
-    console.log('🔄 Botón Admin presionado - Navegando a panel');
-    this.router.navigate(['/admin']);
   }
 
   private calculateMetrics() {

@@ -31,7 +31,7 @@ export class RegisterPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
-      // Rol eliminado - por defecto será 'employee'
+      // Rol eliminado - por defecto será 'user'
     }, {
       validators: this.passwordMatchValidator
     });
@@ -90,7 +90,7 @@ export class RegisterPage implements OnInit {
         await loading.dismiss();
         
         const { fullName, username, email, password } = this.registerForm.value;
-        const role = 'employee'; // Rol por defecto para todos los nuevos usuarios
+        const role = 'user'; // Rol por defecto para todos los nuevos usuarios
         
         // Crear datos del nuevo usuario
         const newUser = {
@@ -145,7 +145,7 @@ export class RegisterPage implements OnInit {
               });
               console.log('🔥 Formulario limpiado después del registro');
               
-              // Todos los usuarios registrados van al home (son empleados por defecto)
+              // Todos los usuarios registrados van al home (son usuarios por defecto)
               console.log('🔥 Registro completado - navegando a /home');
               this.router.navigate(['/home']);
             }
@@ -178,7 +178,7 @@ export class RegisterPage implements OnInit {
       email: '',
       password: '',
       confirmPassword: '',
-      role: 'employee'
+      role: 'user'
     });
     this.showPassword = false;
     this.showConfirmPassword = false;
@@ -210,7 +210,7 @@ export class RegisterPage implements OnInit {
         { name: 'Mac Studio M2', category: 'Workstation', basePrice: 2199, code: 'MST', brands: ['Apple', 'HP'] },
         { name: 'Pro Display XDR', category: 'Monitores Profesionales', basePrice: 4999, code: 'PDX', brands: ['Apple', 'EIZO'] }
       ],
-      'manager': [
+      'user': [
         { name: 'Laptop Dell XPS 15', category: 'Laptops Ejecutivas', basePrice: 1600, code: 'XPS', brands: ['Dell', 'HP', 'Lenovo'] },
         { name: 'ThinkPad X1 Carbon', category: 'Ultrabooks', basePrice: 1800, code: 'TP1', brands: ['Lenovo', 'HP', 'ASUS'] },
         { name: 'Monitor Dell 27" 4K', category: 'Monitores 4K', basePrice: 380, code: 'D27', brands: ['Dell', 'ASUS', 'Acer'] },
@@ -219,9 +219,7 @@ export class RegisterPage implements OnInit {
         { name: 'Sony WH-1000XM5', category: 'Audífonos Premium', basePrice: 399, code: 'SWH', brands: ['Sony', 'Bose', 'Sennheiser'] },
         { name: 'Logitech MX Master 3S', category: 'Mouse Profesional', basePrice: 99, code: 'LMX', brands: ['Logitech', 'Razer'] },
         { name: 'Webcam Logitech Brio 4K', category: 'Cámaras Profesionales', basePrice: 199, code: 'WLB', brands: ['Logitech', 'Razer'] },
-        { name: 'Impresora HP LaserJet Pro', category: 'Impresoras Láser', basePrice: 279, code: 'HLJ', brands: ['HP', 'Canon', 'Brother'] }
-      ],
-      'employee': [
+        { name: 'Impresora HP LaserJet Pro', category: 'Impresoras Láser', basePrice: 279, code: 'HLJ', brands: ['HP', 'Canon', 'Brother'] },
         { name: 'PC HP Pavilion', category: 'Computadoras Desktop', basePrice: 699, code: 'HPP', brands: ['HP', 'Dell', 'Acer'] },
         { name: 'Laptop ASUS VivoBook', category: 'Laptops Básicas', basePrice: 549, code: 'AVB', brands: ['ASUS', 'HP', 'Acer'] },
         { name: 'Monitor ASUS 24" Full HD', category: 'Monitores Estándar', basePrice: 179, code: 'A24', brands: ['ASUS', 'AOC', 'LG'] },
@@ -235,8 +233,8 @@ export class RegisterPage implements OnInit {
     };
 
     // Obtener plantillas según el rol
-    const role = userData.role || 'employee';
-    const templates = productsByRole[role] || productsByRole['employee'];
+    const role = userData.role || 'user';
+    const templates = productsByRole[role] || productsByRole['user'];
     
     // Crear códigos únicos basados en el nombre completo del usuario
     const nameParts = userData.fullName.split(' ').filter((part: string) => part.length > 0);
@@ -244,7 +242,7 @@ export class RegisterPage implements OnInit {
     const nameHash = userData.fullName.toLowerCase().replace(/\s/g, '').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
     
     // Generar número variable de productos según el rol y usuario
-    const baseProducts = role === 'admin' ? 7 : role === 'manager' ? 5 : 4;
+    const baseProducts = role === 'admin' ? 7 : 4;
     const numProducts = baseProducts + ((userHash + nameHash) % 4); // Variación extra por usuario
     
     const selectedProducts = [];
@@ -295,7 +293,7 @@ export class RegisterPage implements OnInit {
     const userData = this.registerForm.value;
     const userSeed = this.createUserSeed(userData);
     const userHash = this.hashString(userSeed);
-    const role = userData.role || 'employee';
+    const role = userData.role || 'user';
     
     console.log(`🔥 Generando actividades para ${userData.fullName}:`, { role, userHash });
     
@@ -307,13 +305,11 @@ export class RegisterPage implements OnInit {
         { action: 'Usuario creado', icon: 'person-add', color: 'tertiary' },
         { action: 'Respaldo generado', icon: 'archive', color: 'medium' }
       ],
-      'manager': [
+      'user': [
         { action: 'Entrada de stock', icon: 'arrow-down-circle', color: 'success' },
         { action: 'Aprobación realizada', icon: 'checkmark-circle', color: 'primary' },
         { action: 'Reporte generado', icon: 'document-text', color: 'tertiary' },
-        { action: 'Inventario revisado', icon: 'eye', color: 'medium' }
-      ],
-      'employee': [
+        { action: 'Inventario revisado', icon: 'eye', color: 'medium' },
         { action: 'Producto registrado', icon: 'add-circle', color: 'primary' },
         { action: 'Stock actualizado', icon: 'create', color: 'warning' },
         { action: 'Salida registrada', icon: 'arrow-up-circle', color: 'danger' },
@@ -329,7 +325,7 @@ export class RegisterPage implements OnInit {
       'Hace 2 días'
     ];
     
-    const activityTypes = activityTypesByRole[role] || activityTypesByRole['employee'];
+    const activityTypes = activityTypesByRole[role] || activityTypesByRole['user'];
     const activities = [];
     const numActivities = role === 'admin' ? 4 + (userHash % 2) : 3 + (userHash % 3);
     

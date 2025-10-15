@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { StorageService } from '../../services/storage.service';
+import { CameraService } from '../../services/camera.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-products',
@@ -16,6 +18,7 @@ export class ProductsPage implements OnInit {
   searchTerm: string = '';
   isLoading: boolean = false;
   selectedCategory: string = 'all';
+  useApiData: boolean = false; // Toggle para usar datos locales o API
   
   categories = [
     { value: 'all', label: 'Todas las Categorías' },
@@ -32,7 +35,9 @@ export class ProductsPage implements OnInit {
     private loadingController: LoadingController,
     private modalController: ModalController,
     private toastController: ToastController,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private cameraService: CameraService,
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -45,10 +50,88 @@ export class ProductsPage implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
+    
+    if (this.useApiData) {
+      // 🌐 CARGAR PRODUCTOS DESDE API
+      this.loadProductsFromApi();
+    } else {
+      // 🏠 CARGAR PRODUCTOS LOCALES
+      this.loadLocalProducts();
+    }
+  }
+
+  // 🌐 MÉTODO PARA CARGAR PRODUCTOS DESDE API
+  private async loadProductsFromApi() {
+    try {
+      const loading = await this.loadingController.create({
+        message: 'Cargando productos desde servidor...',
+        spinner: 'crescent'
+      });
+      await loading.present();
+
+      this.apiService.getProducts().subscribe({
+        next: (apiProducts) => {
+          // Transformar datos del API (posts) a formato de productos
+          this.products = apiProducts.slice(0, 10).map((post: any, index: number) => ({
+            id: post.id,
+            name: `Producto ${post.id}`,
+            category: this.getRandomCategory(),
+            quantity: Math.floor(Math.random() * 100) + 1,
+            price: Math.floor(Math.random() * 1000) + 50,
+            location: `Estante ${Math.floor(Math.random() * 10) + 1}`,
+            description: post.title.substring(0, 50) + '...',
+            photo: null,
+            lastUpdated: new Date().toISOString(),
+            source: 'api'
+          }));
+          
+          this.filteredProducts = [...this.products];
+          this.isLoading = false;
+          loading.dismiss();
+          
+          this.showToast(`✅ ${this.products.length} productos cargados desde API`, 'success');
+        },
+        error: (error) => {
+          console.error('Error cargando productos desde API:', error);
+          this.isLoading = false;
+          loading.dismiss();
+          
+          this.showToast('❌ Error al cargar productos desde API', 'danger');
+          // Fallback a productos locales
+          this.useApiData = false;
+          this.loadLocalProducts();
+        }
+      });
+
+    } catch (error) {
+      this.isLoading = false;
+      this.showToast('🔌 Error de conexión', 'warning');
+      // Fallback a productos locales
+      this.useApiData = false;
+      this.loadLocalProducts();
+    }
+  }
+
+  // 🏠 MÉTODO PARA CARGAR PRODUCTOS LOCALES
+  private loadLocalProducts() {
     const userData = this.storageService.getUserData();
     this.products = this.storageService.getUserInventory(userData.id) || [];
     this.filteredProducts = [...this.products];
     this.isLoading = false;
+  }
+
+  // 🎲 MÉTODO AUXILIAR PARA CATEGORÍAS ALEATORIAS
+  private getRandomCategory(): string {
+    const availableCategories = ['Hardware', 'Periféricos', 'Pantallas', 'Accesorios', 'Software'];
+    return availableCategories[Math.floor(Math.random() * availableCategories.length)];
+  }
+
+  // 🔄 MÉTODO PARA CAMBIAR FUENTE DE DATOS
+  toggleDataSource() {
+    this.useApiData = !this.useApiData;
+    const source = this.useApiData ? 'API REST' : 'Local';
+    this.showToast(`🔄 Cambiado a fuente: ${source}`, 'primary');
+    this.loadProducts();
   }
 
   filterProducts() {
@@ -319,5 +402,49 @@ export class ProductsPage implements OnInit {
 
   getInventoryValue(): number {
     return this.filteredProducts.reduce((total, p) => total + (p.price * p.stock), 0);
+  }
+
+  // 📸 FUNCIONALIDADES DE CÁMARA PARA PRODUCTOS
+  async addProductPhoto(productId: number) {
+    try {
+      const photoData = await this.cameraService.showImageOptions();
+      
+      if (photoData) {
+        // Buscar el producto y agregar la foto
+        const productIndex = this.products.findIndex(p => p.id === productId);
+        if (productIndex !== -1) {
+          this.products[productIndex].photo = photoData;
+          
+          // Guardar en storage
+          const userData = this.storageService.getUserData();
+          this.storageService.setUserInventory(userData.id, this.products);
+          
+          // Actualizar vista
+          this.filteredProducts = [...this.products];
+          
+          // Mostrar confirmación
+          this.showToast('✅ Foto del producto agregada correctamente', 'success');
+        }
+      }
+    } catch (error) {
+      console.error('Error al agregar foto:', error);
+      this.showToast('❌ Error al tomar la foto', 'danger');
+    }
+  }
+
+  async removeProductPhoto(productId: number) {
+    const productIndex = this.products.findIndex(p => p.id === productId);
+    if (productIndex !== -1) {
+      this.products[productIndex].photo = null;
+      
+      // Guardar en storage
+      const userData = this.storageService.getUserData();
+      this.storageService.setUserInventory(userData.id, this.products);
+      
+      // Actualizar vista
+      this.filteredProducts = [...this.products];
+      
+      this.showToast('🗑️ Foto del producto eliminada', 'warning');
+    }
   }
 }

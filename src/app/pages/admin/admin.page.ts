@@ -200,16 +200,9 @@ export class AdminPage implements OnInit {
         {
           name: 'role',
           type: 'radio',
-          label: 'Empleado',
-          value: 'employee',
-          checked: user.role === 'employee'
-        },
-        {
-          name: 'role',
-          type: 'radio',
-          label: 'Gerente',
-          value: 'manager',
-          checked: user.role === 'manager'
+          label: 'Usuario',
+          value: 'user',
+          checked: user.role === 'user'
         },
         {
           name: 'role',
@@ -290,8 +283,7 @@ export class AdminPage implements OnInit {
 
   private getRoleDisplayName(role: string): string {
     const roleNames: { [key: string]: string } = {
-      'employee': 'Empleado',
-      'manager': 'Gerente',
+      'user': 'Usuario',
       'admin': 'Administrador'
     };
     return roleNames[role] || role;

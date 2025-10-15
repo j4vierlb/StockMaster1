@@ -47,11 +47,25 @@ const routes: Routes = [
     loadChildren: () => import('./pages/movements/movements.module').then( m => m.MovementsPageModule),
     canActivate: [AuthGuard]
   },
+  // Página 404 - Not Found
+  {
+    path: 'not-found',
+    loadChildren: () => import('./pages/not-found/notfound.module').then( m => m.NotfoundPageModule)
+  },
+  // Ruta wildcard - debe ser la última
+  {
+    path: '**',
+    redirectTo: 'not-found'
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { 
+      preloadingStrategy: PreloadAllModules,
+      enableTracing: false, // Cambiar a true para debugging
+      onSameUrlNavigation: 'reload'
+    })
   ],
   exports: [RouterModule]
 })

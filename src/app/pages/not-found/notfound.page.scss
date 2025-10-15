@@ -1,0 +1,23 @@
+/* Estilos para la página 404 */
+ion-card {
+  margin: 20px;
+  text-align: center;
+}
+
+ion-card img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+ion-card-title {
+  color: var(--ion-color-danger);
+  font-size: 24px;
+  font-weight: bold;
+}
+
+ion-card-content {
+  font-size: 18px;
+  color: var(--ion-color-medium);
+}

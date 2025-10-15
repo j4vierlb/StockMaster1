@@ -65,25 +65,13 @@
       
     </div>
 
-    <!-- Admin Actions (if admin) -->
-    <div *ngIf="isAdmin" class="home-card" style="margin-top: 2rem;">
-      <div class="card-header">
-        <div class="card-icon">
-          <ion-icon name="settings-outline"></ion-icon>
-        </div>
-        <h3 class="card-title">Panel de Administración</h3>
-      </div>
-      <div class="card-content">
-        <p style="margin-bottom: 1rem;">Gestiona usuarios y configuraciones del sistema</p>
-        <button class="admin-button" (click)="goToAdmin()">
-          <ion-icon name="shield-outline" style="margin-right: 8px;"></ion-icon>
-          Ir al Panel Admin
-        </button>
-      </div>
-    </div>
-
-    <!-- Logout Section -->
-    <div class="logout-section">
+    <!-- Action Buttons Section -->
+    <div class="action-buttons-section">
+      <button class="advanced-button" (click)="goToAdvancedFeatures()">
+        <ion-icon name="settings-outline" style="margin-right: 8px;"></ion-icon>
+        Funcionalidades Avanzadas
+      </button>
+      
       <button class="logout-button" (click)="logout()">
         <ion-icon name="power-outline" style="margin-right: 8px;"></ion-icon>
         Cerrar Sesión
