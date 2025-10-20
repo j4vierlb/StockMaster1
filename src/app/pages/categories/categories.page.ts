@@ -6,7 +6,7 @@ import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.page.html',
-  styleUrls: ['./categories.page.scss'],
+  styleUrls: ['./categories.page.css'],
   standalone: false,
 })
 export class CategoriesPage implements OnInit {
