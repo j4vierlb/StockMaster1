@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="glass-content">
+<ion-content class="glass-content mobile-optimized" scrollY="true">
   <!-- Sección de búsqueda y filtros -->
   <div class="search-section">
     <ion-card class="search-card">
@@ -47,29 +47,44 @@
   </div>
 
   <!-- 🌐 Toggle para fuente de datos -->
-  <div class="data-source-section">
-    <ion-card class="data-source-card">
+  <!-- Sección de acciones rápidas -->
+  <div class="actions-section">
+    <ion-card class="actions-card">
       <ion-card-content>
-        <div class="data-source-toggle">
-          <div class="source-info">
-            <ion-icon [name]="useApiData ? 'cloud-outline' : 'phone-portrait-outline'" class="source-icon"></ion-icon>
-            <div class="source-details">
-              <div class="source-label">Fuente de datos:</div>
-              <div class="source-status" [class.api-active]="useApiData" [class.local-active]="!useApiData">
-                {{ useApiData ? 'API REST' : 'Almacenamiento Local' }}
-              </div>
+        <div class="actions-grid">
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            size="default"
+            (click)="showLocalProducts()"
+            [class.active]="!showingMarket">
+            <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+            Mi Inventario
+          </ion-button>
+          
+          <ion-button 
+            fill="outline" 
+            color="secondary" 
+            size="default"
+            (click)="showMarketProducts()"
+            [class.active]="showingMarket">
+            <ion-icon name="storefront-outline" slot="start"></ion-icon>
+            Ver Mercado
+          </ion-button>
+        </div>
+        
+        <div class="current-view-info">
+          <div class="view-indicator" 
+               [class.market-mode]="showingMarket" 
+               [class.local-mode]="!showingMarket"
+               [class.sqlite-mode]="!showingMarket && currentStorageType === 'sqlite'"
+               [class.localstorage-mode]="!showingMarket && currentStorageType === 'localstorage'">
+            <ion-icon [name]="storageInfo.icon" class="mode-icon"></ion-icon>
+            <div class="storage-details">
+              <span class="storage-label">{{ storageInfo.label }}</span>
+              <small class="storage-description">{{ storageInfo.description }}</small>
             </div>
           </div>
-          <ion-toggle 
-            [(ngModel)]="useApiData" 
-            (ionChange)="toggleDataSource()"
-            color="primary"
-            class="source-toggle">
-          </ion-toggle>
-        </div>
-        <div class="source-description">
-          <small *ngIf="!useApiData">📱 Usando datos almacenados localmente en el dispositivo</small>
-          <small *ngIf="useApiData">🌐 Cargando productos desde servidor remoto (JSONPlaceholder API)</small>
         </div>
       </ion-card-content>
     </ion-card>
@@ -120,108 +135,15 @@
     </div>
 
     <div *ngIf="!isLoading && filteredProducts.length > 0" class="products-list">
-      <ion-card *ngFor="let product of filteredProducts" class="product-card">
-        <ion-card-content>
-          <div class="product-header">
-            <div class="product-info">
-              <h3 class="product-name">{{ product.name }}</h3>
-              <p class="product-category">
-                <ion-icon name="pricetag-outline"></ion-icon>
-                {{ product.category }}
-              </p>
-            </div>
-            <div class="product-actions">
-              <ion-button fill="clear" size="small" (click)="editProduct(product)" color="primary">
-                <ion-icon name="create-outline"></ion-icon>
-              </ion-button>
-              <ion-button fill="clear" size="small" (click)="deleteProduct(product)" color="danger">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-button>
-            </div>
-          </div>
-
-          <div class="product-details">
-            <div class="detail-row">
-              <div class="detail-item">
-                <ion-icon name="cube-outline" class="detail-icon"></ion-icon>
-                <div class="detail-info">
-                  <span class="detail-label">Stock</span>
-                  <span class="detail-value stock-value" [class]="product.stock < 10 ? 'low-stock' : 'normal-stock'">
-                    {{ product.stock }} unidades
-                  </span>
-                </div>
-              </div>
-              
-              <div class="detail-item">
-                <ion-icon name="cash-outline" class="detail-icon"></ion-icon>
-                <div class="detail-info">
-                  <span class="detail-label">Precio</span>
-                  <span class="detail-value">{{ formatCurrency(product.price) }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="detail-row">
-              <div class="detail-item">
-                <ion-icon name="location-outline" class="detail-icon"></ion-icon>
-                <div class="detail-info">
-                  <span class="detail-label">Ubicación</span>
-                  <span class="detail-value">{{ product.location }}</span>
-                </div>
-              </div>
-              
-              <div class="detail-item">
-                <ion-badge [color]="getStatusColor(product.status)" class="status-badge">
-                  {{ product.status }}
-                </ion-badge>
-              </div>
-            </div>
-
-            <div class="detail-row">
-              <div class="detail-item full-width">
-                <ion-icon name="calculator-outline" class="detail-icon"></ion-icon>
-                <div class="detail-info">
-                  <span class="detail-label">Valor Total</span>
-                  <span class="detail-value total-value">{{ formatCurrency(product.price * product.stock) }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 📸 SECCIÓN DE FOTO DEL PRODUCTO -->
-            <div class="product-photo-section">
-              <div class="photo-header">
-                <ion-icon name="camera-outline" class="photo-icon"></ion-icon>
-                <span class="photo-label">Foto del Producto</span>
-              </div>
-              
-              <div class="photo-container" *ngIf="product.photo; else noPhoto">
-                <img [src]="product.photo" alt="Foto de {{ product.name }}" class="product-image">
-                <div class="photo-actions">
-                  <ion-button fill="clear" size="small" (click)="addProductPhoto(product.id)" color="primary">
-                    <ion-icon name="camera-outline"></ion-icon>
-                    Cambiar
-                  </ion-button>
-                  <ion-button fill="clear" size="small" (click)="removeProductPhoto(product.id)" color="danger">
-                    <ion-icon name="trash-outline"></ion-icon>
-                    Eliminar
-                  </ion-button>
-                </div>
-              </div>
-              
-              <ng-template #noPhoto>
-                <div class="no-photo-container">
-                  <ion-icon name="image-outline" class="no-photo-icon"></ion-icon>
-                  <p class="no-photo-text">Sin foto</p>
-                  <ion-button fill="outline" size="small" (click)="addProductPhoto(product.id)" color="primary">
-                    <ion-icon name="camera-outline" slot="start"></ion-icon>
-                    Agregar Foto
-                  </ion-button>
-                </div>
-              </ng-template>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
+      <app-product-card 
+        *ngFor="let product of filteredProducts"
+        [product]="product"
+        [showingMarket]="showingMarket"
+        (editProduct)="editProduct($event)"
+        (deleteProduct)="deleteProduct($event)"
+        (addPhoto)="addProductPhoto($event)"
+        (removePhoto)="removeProductPhoto($event)">
+      </app-product-card>
     </div>
   </div>
 

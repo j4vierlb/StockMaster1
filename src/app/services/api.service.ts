@@ -14,7 +14,7 @@ export interface ApiResponse<T> {
 })
 export class ApiService {
 
-  private baseUrl = 'https://jsonplaceholder.typicode.com'; // API de prueba
+  private baseUrl = 'https://fakestoreapi.com'; // API de productos reales
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -71,32 +71,52 @@ export class ApiService {
     return throwError(() => new Error(errorMessage));
   }
 
-  // Métodos específicos para tu aplicación
+  // Métodos específicos para productos de FakeStore API
   getProducts(): Observable<any[]> {
-    return this.get<any[]>('posts'); // Simula productos
+    return this.get<any[]>('products'); // Obtener productos reales
   }
 
+  getProduct(id: number): Observable<any> {
+    return this.get<any>(`products/${id}`); // Producto específico
+  }
+
+  getCategories(): Observable<string[]> {
+    return this.get<string[]>('products/categories'); // Categorías disponibles
+  }
+
+  getProductsByCategory(category: string): Observable<any[]> {
+    return this.get<any[]>(`products/category/${category}`); // Productos por categoría
+  }
+
+  // Métodos simulados (FakeStore es solo lectura)
   createProduct(product: any): Observable<any> {
-    return this.post<any>('posts', product);
+    return this.post<any>('products', product); // Simulado
   }
 
   updateProduct(id: number, product: any): Observable<any> {
-    return this.put<any>(`posts/${id}`, product);
+    return this.put<any>(`products/${id}`, product); // Simulado
   }
 
   deleteProduct(id: number): Observable<any> {
-    return this.delete<any>(`posts/${id}`);
+    return this.delete<any>(`products/${id}`); // Simulado
   }
 
-  // Autenticación simulada
+  // Autenticación simulada (FakeStore no tiene auth real)
   login(credentials: any): Observable<any> {
-    return this.post<any>('posts', credentials)
-      .pipe(
-        map(response => ({
+    // Simulamos una respuesta exitosa ya que FakeStore no maneja autenticación
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next({
           success: true,
-          token: 'fake-jwt-token',
-          user: { id: 1, username: credentials.username }
-        }))
-      );
+          token: 'fake-jwt-token-fakestore',
+          user: { 
+            id: 1, 
+            username: credentials.username,
+            email: `${credentials.username}@fakestore.com`
+          }
+        });
+        observer.complete();
+      }, 1000); // Simula delay de red
+    });
   }
 }

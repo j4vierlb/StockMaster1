@@ -20,6 +20,14 @@ export class AdminPage implements OnInit {
     predefinedUsers: 1
   };
 
+  // 🔧 Debug y información de almacenamiento
+  storageInfo = {
+    sqliteStatus: 'Verificando...',
+    sqliteData: [] as any[],
+    localStorageData: [] as any[],
+    totalLocalStorageSize: '0 KB'
+  };
+
   constructor(
     private router: Router,
     private alertController: AlertController,
@@ -39,9 +47,9 @@ export class AdminPage implements OnInit {
     console.log('Admin data loaded:', this.adminData);
   }
 
-  loadSystemStats() {
+  async loadSystemStats() {
     // Cargar usuarios registrados
-    this.registeredUsers = this.storageService.getItem('registeredUsers') || [];
+    this.registeredUsers = await this.storageService.getItem('registeredUsers') || [];
     
     // Usuarios predefinidos
     const predefinedUsers = ['admin'];
@@ -238,15 +246,15 @@ export class AdminPage implements OnInit {
 
     try {
       // Obtener usuarios registrados
-      const registeredUsers = this.storageService.getItem('registeredUsers') || [];
+      const registeredUsers = await this.storageService.getItem('registeredUsers') || [];
       
       // Encontrar y actualizar el usuario
-      const userIndex = registeredUsers.findIndex((u: any) => u.id === user.id);
-      if (userIndex !== -1) {
+      const userIndex = Array.isArray(registeredUsers) ? registeredUsers.findIndex((u: any) => u.id === user.id) : -1;
+      if (userIndex !== -1 && Array.isArray(registeredUsers)) {
         registeredUsers[userIndex].role = newRole;
         
         // Guardar cambios
-        this.storageService.setItem('registeredUsers', registeredUsers);
+        await this.storageService.setItem('registeredUsers', registeredUsers);
         
         // Recargar datos para reflejar cambios
         this.loadSystemStats();
@@ -289,9 +297,9 @@ export class AdminPage implements OnInit {
     return roleNames[role] || role;
   }
 
-  logout() {
-    this.storageService.logout();
-    this.router.navigate(['/login']);
+  async logout() {
+    await this.storageService.logout();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 
 }

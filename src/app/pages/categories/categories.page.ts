@@ -30,14 +30,14 @@ export class CategoriesPage implements OnInit {
     this.loadCategories();
   }
 
-  loadCategories() {
+  async loadCategories() {
     this.isLoading = true;
     const userData = this.storageService.getUserData();
     
     // Cargar categorías del usuario o crear categorías por defecto
-    let userCategories = this.storageService.getItem(`categories_${userData.id}`);
+    let userCategories = await this.storageService.getItem(`categories_${userData.id}`);
     
-    if (!userCategories || userCategories.length === 0) {
+    if (!userCategories || (Array.isArray(userCategories) && userCategories.length === 0)) {
       // Crear categorías por defecto
       userCategories = [
         {
@@ -82,13 +82,16 @@ export class CategoriesPage implements OnInit {
         }
       ];
       
-      this.storageService.setItem(`categories_${userData.id}`, userCategories);
+      await this.storageService.setItem(`categories_${userData.id}`, userCategories);
     }
     
     // Actualizar conteo de productos por categoría
-    this.updateProductCounts(userCategories, userData.id);
-    
-    this.categories = userCategories;
+    if (Array.isArray(userCategories)) {
+      this.updateProductCounts(userCategories, userData.id);
+      this.categories = userCategories;
+    } else {
+      this.categories = [];
+    }
     this.isLoading = false;
   }
 

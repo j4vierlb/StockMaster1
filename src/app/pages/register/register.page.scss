@@ -1,59 +1,24 @@
-@import '../../../theme/variables.scss';
+@use '../../../theme/variables.scss' as *;
+@use '../../../theme/mixins.scss' as *;
 
-// @include stockmaster-theme;
+:host { @include page-background(); }
 
-// Eliminar efectos ripple/liquid de Ionic
-ion-button, 
-.password-toggle,
-button {
-  --ripple-color: transparent !important;
-  --border-style: none !important;
-  --box-shadow: none !important;
-  
-  &::part(native) {
-    --ripple-color: transparent !important;
-  }
-}
+@keyframes slideInFromBottom { 0% { opacity: 0; transform: translate3d(0, 30px, 0); } 100% { opacity: 1; transform: translate3d(0, 0, 0); } }@keyframes floatingAnimation { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -5px, 0); } }
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes liquidShine { 0% { transform: translateX(-100%) skewX(-15deg); opacity: 0; } 50% { transform: translateX(0%) skewX(-15deg); opacity: 1; } 100% { transform: translateX(100%) skewX(-15deg); opacity: 0; } }
 
-// Animaciones modernas
-@keyframes slideInFromBottom {
-  0% { 
-    opacity: 0; 
-    transform: translate3d(0, 30px, 0); 
-  }
-  100% { 
-    opacity: 1; 
-    transform: translate3d(0, 0, 0); 
-  }
-}
-
-@keyframes floatingAnimation {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -5px, 0); }
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-// Fondo principal con patrón geométrico - SIN PADDING
-ion-content {
+// 🌟 FONDO MODERNO IGUAL AL LOGIN
+.register-content {
   --padding-top: 0px;
   --padding-bottom: 0px;
   --padding-start: 0px;
   --padding-end: 0px;
   
-  --background: transparent;
-}
-
-.register-content {
   background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(30, 58, 138, 0.5) 0%, transparent 50%),
+    linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #06b6d4 70%, #0284c7 100%) !important;
   
   min-height: 100vh;
   position: relative;
@@ -67,13 +32,25 @@ ion-content {
     right: 0;
     bottom: 0;
     background-image: 
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
-    background-size: 30px 30px;
+      linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%),
+      radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0);
+    background-size: 60px 60px, 40px 40px;
     pointer-events: none;
+    animation: backgroundShift 20s ease-in-out infinite;
   }
 }
 
-// Contenedor principal del registro - SIN MARGIN
+// 🚀 FUERZA EL NUEVO FONDO AZUL (Sobrescribe cualquier CSS de Ionic)
+ion-content.register-content {
+  --background: transparent !important;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(30, 58, 138, 0.5) 0%, transparent 50%),
+    linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #06b6d4 70%, #0284c7 100%) !important;
+}
+
+// Contenedor principal del registro - IGUAL AL LOGIN
 .page-container {
   display: flex;
   flex-direction: column;
@@ -84,28 +61,20 @@ ion-content {
   z-index: 1;
 }
 
-// Contenedor principal del registro
 .register-container {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
-  will-change: transform, opacity;
   border-radius: 0;
   padding: 2rem 1.5rem;
-  max-width: 100%;
-  width: 100%;
   margin: 0;
+  width: 100%;
   min-height: 100vh;
   position: relative;
-  
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-  
+  box-shadow: $shadow-lg, inset 0 1px 0 rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  animation: slideInFromBottom 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: slideInFromBottom 1s $transition-slow;
   
+  // Efecto de brillo sutil
   &::before {
     content: '';
     position: absolute;
@@ -114,11 +83,41 @@ ion-content {
     right: 0;
     height: 2px;
     background: linear-gradient(90deg, 
-      transparent, 
-      rgba(255, 255, 255, 0.6), 
-      transparent
+      transparent 0%, 
+      rgba(255, 255, 255, 0.6) 50%, 
+      transparent 100%
     );
-    border-radius: 30px 30px 0 0;
+    border-radius: 25px 25px 0 0;
+  }
+  
+  // 🔧 OPTIMIZACIÓN PARA TECLADO ANDROID
+  .brand-section {
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+    
+    // Reducir tamaño en móviles
+    @media (max-height: 700px) {
+      margin-bottom: 0.5rem;
+      
+      .app-title {
+        font-size: 2rem !important;
+      }
+      
+      .register-subtitle {
+        font-size: 1.2rem !important;
+      }
+      
+      .register-description {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+    }
+  }
+  
+  .register-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   
   &::after {
@@ -135,49 +134,66 @@ ion-content {
   }
 }
 
-// Header del registro
-.brand-section {
+.register-header {
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
   
-  .logo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
+  .brand-section {
+    margin-bottom: 2rem;
     
     .logo-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-      border-radius: 25px;
+      width: 100px;
+      height: 100px;
+      @include elegant-icon($color-blue-primary);
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: $radius-xl;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 0 auto 1.5rem;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 3px solid rgba(0, 0, 0, 0.9);
       animation: floatingAnimation 4s ease-in-out infinite;
+      box-shadow: $shadow-lg, inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+        transform: translateX(-100%);
+        animation: liquidShine 3s ease-in-out infinite;
+        border-radius: $radius-xl;
+      }
       
       ion-icon {
-        font-size: 2.2rem;
-        color: rgba(255, 255, 255, 0.9);
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        font-size: 3.5rem;
+        color: #000000;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        z-index: 1;
+        position: relative;
       }
     }
     
-    .app-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.95);
+    .brand-name {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
       letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .brand-tagline {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      font-weight: 500;
       margin: 0;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      
-      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
   }
   
@@ -201,10 +217,30 @@ ion-content {
 .register-form {
   .form-group {
     position: relative;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
+    animation: slideInFromBottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation-fill-mode: both;
+    
+    // 📱 OPTIMIZACIÓN PARA PANTALLAS PEQUEÑAS
+    @media (max-height: 700px) {
+      margin-bottom: 0.8rem;
+    }
+    
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+    &:nth-child(5) { animation-delay: 0.5s; }
     
     .input-container {
       position: relative;
+      
+      // 🔑 CONTENEDOR ESPECIAL PARA CONTRASEÑAS
+      &.password-container {
+        .form-input {
+          padding-right: 60px; // Más espacio para el botón
+        }
+      }
       
       .input-icon {
         position: absolute;
@@ -260,6 +296,47 @@ ion-content {
         }
       }
       
+      // 👁️ BOTÓN DE MOSTRAR CONTRASEÑA - TEMA AZUL
+      .password-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 50%, #0284c7 100%);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        padding: 12px;
+        z-index: 4;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        transition: all 0.3s ease;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        ion-icon {
+          font-size: 1.2rem;
+          font-weight: bold;
+          display: block;
+          filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        }
+        
+        &:hover, &:focus {
+          background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #0c4a6e 100%);
+          transform: translateY(-50%) scale(1.05);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        &:active {
+          transform: translateY(-50%) scale(0.95);
+          box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+        }
+      }
+      
+      // Mantener compatibilidad con el estilo anterior
       .password-toggle {
         position: absolute;
         right: 15px;
@@ -305,11 +382,11 @@ ion-content {
   }
 }
 
-// Botón de registro
+// Botón de registro - TEMA AZUL
 .register-button {
-  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 40%, #0284c7 100%);
   background-size: 300% 300%;
-  animation: gradientShift 3s ease infinite;
+  animation: gradientShift 4s ease infinite;
   
   border: none;
   border-radius: 20px;
@@ -327,15 +404,17 @@ ion-content {
   margin-top: 1rem;
   
   box-shadow: 
-    0 8px 25px rgba(16, 185, 129, 0.3),
-    0 2px 10px rgba(5, 150, 105, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 8px 25px rgba(59, 130, 246, 0.5),
+    0 4px 15px rgba(30, 64, 175, 0.4),
+    0 2px 10px rgba(2, 132, 199, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   
   &:hover {
     transform: translateY(-3px);
     box-shadow: 
-      0 12px 35px rgba(16, 185, 129, 0.4),
-      0 4px 15px rgba(5, 150, 105, 0.3);
+      0 12px 35px rgba(59, 130, 246, 0.6),
+      0 8px 25px rgba(30, 64, 175, 0.5),
+      0 4px 15px rgba(2, 132, 199, 0.4);
   }
   
   &:active {
@@ -459,7 +538,9 @@ ion-content {
         height: 60px;
         
         ion-icon {
-          font-size: 1.8rem;
+          font-size: 2.2rem;
+          color: #000000;
+          filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
         }
       }
       

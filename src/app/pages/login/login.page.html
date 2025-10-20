@@ -1,5 +1,5 @@
-<ion-content [fullscreen]="true" class="login-content">
-  <div class="login-container">
+<ion-content [fullscreen]="true" class="login-content" scrollY="true">
+  <div class="login-container mobile-optimized">
     
     <!-- Header personalizado -->
     <div class="login-header">
@@ -36,18 +36,20 @@
 
       <!-- Campo Contraseña -->
       <div class="form-group">
-        <div class="input-container">
-          <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
-          <input 
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Contraseña"
-            class="form-input"
-            autocomplete="current-password"
-          >
+        <div class="password-container">
+          <div class="input-container">
+            <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+            <input 
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Contraseña"
+              class="form-input"
+              autocomplete="current-password"
+            >
+          </div>
           <button 
             type="button" 
-            class="password-toggle"
+            class="password-toggle-btn"
             (click)="togglePasswordVisibility()">
             <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
           </button>

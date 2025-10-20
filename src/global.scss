@@ -1,3 +1,10 @@
+// Importar variables y mixins del sistema de diseño
+@use './theme/variables.scss' as *;
+@use './theme/mixins.scss' as *;
+
+// Importar responsive global forzado
+@import './global-responsive.scss';
+
 body, .login-content {
 	min-height: 100vh;
 	background: linear-gradient(135deg, #3a1c71 0%, #040404 50%, #1e90ff 100%);

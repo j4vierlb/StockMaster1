@@ -1,8 +1,9 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { StorageService } from '../../services/storage.service';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { StorageService } from '../../services/storage.service';
   styleUrls: ['./login.page.scss'],
   standalone: false,
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   
   loginForm!: FormGroup;
   showPassword: boolean = false;
@@ -41,6 +42,24 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/home']);
       }
       return;
+    }
+
+    // 📱 Configurar comportamiento del teclado para Android
+    this.setupKeyboardBehavior();
+  }
+
+  ngOnDestroy() {
+    // Limpiar listeners del teclado si existen
+  }
+
+  // 📱 OPTIMIZACIÓN DEL TECLADO PARA ANDROID
+  private async setupKeyboardBehavior() {
+    try {
+      // Configurar el teclado para que se superponga (mejor experiencia)
+      await Keyboard.setAccessoryBarVisible({ isVisible: false });
+      await Keyboard.setScroll({ isDisabled: false });
+    } catch (error) {
+      console.log('Keyboard API no disponible:', error);
     }
   }
 
@@ -107,11 +126,11 @@ export class LoginPage implements OnInit {
     
     console.log('🔐 Usuarios válidos:', validUsers);
     
-    // Obtener usuarios registrados desde localStorage
-    const registeredUsers = this.storageService.getItem('registeredUsers') || [];
-    const registeredUser = registeredUsers.find((user: any) => 
+    // Obtener usuarios registrados desde localStorage (CORREGIDO: usar await)
+    const registeredUsers = await this.storageService.getItem('registeredUsers') || [];
+    const registeredUser = Array.isArray(registeredUsers) ? registeredUsers.find((user: any) => 
       user.username.toLowerCase() === cleanUsername.toLowerCase() && user.password === cleanPassword
-    );
+    ) : null;
     
     console.log('🔐 Usuarios registrados:', registeredUsers);
     console.log('🔐 Usuario registrado encontrado:', registeredUser);

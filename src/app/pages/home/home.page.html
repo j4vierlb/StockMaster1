@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" class="home-content">
+<ion-content [fullscreen]="true" class="home-content mobile-optimized" scrollY="true">
   <div class="page-container">
     
     <!-- Home Header Mejorado -->
@@ -68,13 +68,13 @@
     <!-- Action Buttons Section -->
     <div class="action-buttons-section">
       <button class="advanced-button" (click)="goToAdvancedFeatures()">
-        <ion-icon name="settings-outline" style="margin-right: 8px;"></ion-icon>
-        Funcionalidades Avanzadas
+        <ion-icon name="settings-outline"></ion-icon>
+        <span>Funcionalidades Avanzadas</span>
       </button>
       
       <button class="logout-button" (click)="logout()">
-        <ion-icon name="power-outline" style="margin-right: 8px;"></ion-icon>
-        Cerrar Sesión
+        <ion-icon name="power-outline"></ion-icon>
+        <span>Cerrar Sesión</span>
       </button>
     </div>
 

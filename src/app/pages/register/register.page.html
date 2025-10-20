@@ -1,16 +1,20 @@
 <ion-content [fullscreen]="true" class="register-content">
   <div class="page-container">
     <div class="register-container">
-      <!-- Brand Section -->
-      <div class="brand-section">
-        <div class="logo-container">
-          <ion-icon name="cube-outline" class="logo-icon"></ion-icon>
-          <h1 class="app-title">StockMaster</h1>
+      <!-- Header personalizado -->
+      <div class="register-header">
+        <div class="brand-section">
+          <div class="logo-icon">
+            <ion-icon name="cube-outline"></ion-icon>
+          </div>
+          <div class="brand-name">STOCKMASTER</div>
+          <div class="brand-tagline">Gestión Inteligente de Inventario ✨</div>
         </div>
-        <h2 class="register-subtitle">Crear Cuenta</h2>
-        <p class="register-description">
-          Completa tus datos para unirte a nuestro sistema de gestión de inventario
-        </p>
+        
+        <div class="welcome-text">
+          <h1>¡Crear Nueva Cuenta!</h1>
+          <p>Completa tus datos para unirte</p>
+        </div>
       </div>
 
       <!-- Register Form -->
@@ -69,7 +73,7 @@
 
         <!-- Contraseña -->
         <div class="form-group">
-          <div class="input-container">
+          <div class="input-container password-container">
             <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
             <input 
               [type]="showPassword ? 'text' : 'password'"
@@ -89,7 +93,7 @@
 
         <!-- Confirmar contraseña -->
         <div class="form-group">
-          <div class="input-container">
+          <div class="input-container password-container">
             <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
             <input 
               [type]="showConfirmPassword ? 'text' : 'password'"

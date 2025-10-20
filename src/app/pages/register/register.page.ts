@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { StorageService } from '../../services/storage.service';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import { StorageService } from '../../services/storage.service';
   styleUrls: ['./register.page.scss'],
   standalone: false
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   showPassword = false;
   showConfirmPassword = false;
@@ -51,14 +52,32 @@ export class RegisterPage implements OnInit {
       });
       console.log('🔥 Formulario limpiado al entrar a la página de registro');
     }
+
+    // 📱 Configurar comportamiento del teclado para Android
+    this.setupKeyboardBehavior();
+  }
+
+  ngOnDestroy() {
+    // Limpiar listeners del teclado si existen
+  }
+
+  // 📱 OPTIMIZACIÓN DEL TECLADO PARA ANDROID
+  private async setupKeyboardBehavior() {
+    try {
+      // Configurar el teclado para que se superponga (mejor experiencia)
+      await Keyboard.setAccessoryBarVisible({ isVisible: false });
+      await Keyboard.setScroll({ isDisabled: false });
+    } catch (error) {
+      console.log('Keyboard API no disponible:', error);
+    }
   }
 
   // Validador personalizado para verificar si el usuario ya existe
   async usernameExistsValidator(control: AbstractControl): Promise<any> {
     if (!control.value) return null;
     
-    const existingUsers = this.storageService.getItem('registeredUsers') || [];
-    const userExists = existingUsers.some((user: any) => user.username.toLowerCase() === control.value.toLowerCase());
+    const existingUsers = await this.storageService.getItem('registeredUsers') || [];
+    const userExists = Array.isArray(existingUsers) ? existingUsers.some((user: any) => user.username.toLowerCase() === control.value.toLowerCase()) : false;
     
     return userExists ? { userExists: true } : null;
   }
@@ -74,9 +93,8 @@ export class RegisterPage implements OnInit {
   }
 
   async register() {
-    console.log('📝 Iniciando registro...'); // Debug
-    console.log('Formulario válido:', this.registerForm.valid); // Debug
-    console.log('Valores del formulario:', this.registerForm.value); // Debug
+    console.log('📝 Iniciando registro...');
+    console.log('Formulario válido:', this.registerForm.valid);
 
     if (this.registerForm.valid) {
       const loading = await this.loadingController.create({
@@ -86,11 +104,8 @@ export class RegisterPage implements OnInit {
       
       await loading.present();
       
-      setTimeout(async () => {
-        await loading.dismiss();
-        
+      try {
         const { fullName, username, email, password } = this.registerForm.value;
-        const role = 'user'; // Rol por defecto para todos los nuevos usuarios
         
         // Crear datos del nuevo usuario
         const newUser = {
@@ -98,34 +113,44 @@ export class RegisterPage implements OnInit {
           username: username.toLowerCase(),
           name: fullName,
           email: email.toLowerCase(),
-          password: password, // En producción esto debería estar encriptado
-          role: role,
+          password: password,
+          role: 'user',
           registrationDate: new Date().toISOString(),
           loginTime: new Date().toISOString()
         };
 
-        console.log('Nuevo usuario creado:', newUser); // Debug
+        console.log('👤 Nuevo usuario creado:', newUser);
         
         // Obtener usuarios existentes
-        const existingUsers = this.storageService.getItem('registeredUsers') || [];
+        let existingUsers;
+        try {
+          existingUsers = await this.storageService.getItem('registeredUsers') || [];
+          console.log('👥 Usuarios existentes obtenidos:', existingUsers.length);
+        } catch (error) {
+          console.error('❌ Error obteniendo usuarios existentes:', error);
+          existingUsers = [];
+        }
         
         // Agregar el nuevo usuario
-        existingUsers.push(newUser);
+        if (Array.isArray(existingUsers)) {
+          existingUsers.push(newUser);
+        } else {
+          existingUsers = [newUser];
+        }
         
         // Guardar la lista actualizada
-        this.storageService.setItem('registeredUsers', existingUsers);
+        await this.storageService.setItem('registeredUsers', existingUsers);
+        console.log('✅ Usuario guardado exitosamente');
         
-        console.log('Usuario guardado en localStorage'); // Debug
-        
-        // Iniciar sesión automáticamente con el nuevo usuario
+        // Iniciar sesión automáticamente
         this.storageService.setUserData(newUser);
         const token = `token_${username}_${Date.now()}`;
         this.storageService.setAuthToken(token);
         
-        // Generar inventario inicial para el nuevo usuario
-        this.generateInitialInventory(newUser.id);
+        // Crear inventario básico
+        this.storageService.setUserInventory(newUser.id, []);
         
-        console.log('Sesión iniciada automáticamente'); // Debug
+        await loading.dismiss();
         
         // Mostrar mensaje de éxito
         const alert = await this.alertController.create({
@@ -134,26 +159,26 @@ export class RegisterPage implements OnInit {
           buttons: [{
             text: 'Continuar',
             handler: () => {
-              // Limpiar el formulario después del registro exitoso
-              this.registerForm.reset({
-                fullName: '',
-                username: '',
-                email: '',
-                password: '',
-                confirmPassword: ''
-                // Rol eliminado del reset después del registro
-              });
-              console.log('🔥 Formulario limpiado después del registro');
-              
-              // Todos los usuarios registrados van al home (son usuarios por defecto)
-              console.log('🔥 Registro completado - navegando a /home');
+              this.registerForm.reset();
               this.router.navigate(['/home']);
             }
           }]
         });
+        
         await alert.present();
         
-      }, 1500);
+      } catch (error) {
+        await loading.dismiss();
+        console.error('❌ Error durante el registro:', error);
+        
+        const errorAlert = await this.alertController.create({
+          header: 'Error de Registro',
+          message: 'No se pudo crear la cuenta. Por favor, intenta nuevamente.',
+          buttons: ['OK']
+        });
+        
+        await errorAlert.present();
+      }
     } else {
       // Marcar todos los campos como tocados para mostrar errores
       Object.keys(this.registerForm.controls).forEach(key => {
@@ -188,13 +213,16 @@ export class RegisterPage implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  private generateInitialInventory(userId: string) {
-    // Obtener información del usuario recién registrado
-    const userData = this.registerForm.value;
-    const userSeed = this.createUserSeed(userData);
-    const userHash = this.hashString(userSeed);
-    
-    console.log(`🔥 Generando inventario para ${userData.fullName}:`, { userId, userSeed, userHash });
+  private async generateInitialInventory(userId: string) {
+    try {
+      console.log('🎒 Iniciando generación de inventario inicial para:', userId);
+      
+      // Obtener información del usuario recién registrado
+      const userData = this.registerForm.value;
+      const userSeed = this.createUserSeed(userData);
+      const userHash = this.hashString(userSeed);
+      
+      console.log(`🔥 Generando inventario para ${userData.fullName}:`, { userId, userSeed, userHash });
     
     // Amplio pool de productos únicos por rol
     const productsByRole: { [key: string]: any[] } = {
@@ -284,18 +312,30 @@ export class RegisterPage implements OnInit {
     this.storageService.setUserInventory(userId, selectedProducts);
     
     // Generar actividades recientes únicas para el usuario
-    this.generateInitialActivities(userId, selectedProducts);
+    await this.generateInitialActivities(userId, selectedProducts);
     
-    console.log(`Inventario único generado para ${userData.fullName} (${role}):`, selectedProducts);
+    console.log(`✅ Inventario único generado para ${userData.fullName} (${role}):`, selectedProducts);
+    
+    } catch (error) {
+      console.error('❌ Error generando inventario inicial:', error);
+      // Si falla, al menos intentar crear un inventario básico
+      try {
+        this.storageService.setUserInventory(userId, []);
+        console.log('🔄 Inventario vacío creado como fallback');
+      } catch (fallbackError) {
+        console.error('❌ Error crítico creando inventario fallback:', fallbackError);
+      }
+    }
   }
   
-  private generateInitialActivities(userId: string, inventory: any[]) {
-    const userData = this.registerForm.value;
-    const userSeed = this.createUserSeed(userData);
-    const userHash = this.hashString(userSeed);
-    const role = userData.role || 'user';
-    
-    console.log(`🔥 Generando actividades para ${userData.fullName}:`, { role, userHash });
+  private async generateInitialActivities(userId: string, inventory: any[]) {
+    try {
+      const userData = this.registerForm.value;
+      const userSeed = this.createUserSeed(userData);
+      const userHash = this.hashString(userSeed);
+      const role = userData.role || 'user';
+      
+      console.log(`🔥 Generando actividades para ${userData.fullName}:`, { role, userHash });
     
     // Actividades específicas por rol
     const activityTypesByRole: { [key: string]: any[] } = {
@@ -344,7 +384,18 @@ export class RegisterPage implements OnInit {
     }
     
     this.storageService.setUserActivities(userId, activities);
-    console.log(`Actividades únicas generadas para ${userData.fullName} (${role}):`, activities);
+    console.log(`✅ Actividades únicas generadas para ${userData.fullName} (${role}):`, activities);
+    
+    } catch (error) {
+      console.error('❌ Error generando actividades iniciales:', error);
+      // Si falla, crear actividades básicas
+      try {
+        this.storageService.setUserActivities(userId, []);
+        console.log('🔄 Actividades vacías creadas como fallback');
+      } catch (fallbackError) {
+        console.error('❌ Error crítico creando actividades fallback:', fallbackError);
+      }
+    }
   }
   
   private hashString(str: string): number {

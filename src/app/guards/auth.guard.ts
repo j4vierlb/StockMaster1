@@ -11,13 +11,10 @@ export class AuthGuard implements CanActivate {
     private storageService: StorageService,
     private router: Router
   ) {}
-
-  canActivate(): boolean {
+  async canActivate(): Promise<boolean> {
     console.log('🛡️ AuthGuard ejecutándose...'); // Debug
-    
     const userData = this.storageService.getUserData();
     const authToken = this.storageService.getAuthToken();
-    
     console.log('🛡️ Datos en AuthGuard:', { 
       userData: !!userData, 
       authToken: !!authToken,
@@ -25,15 +22,14 @@ export class AuthGuard implements CanActivate {
       userDataContent: userData,
       authTokenContent: authToken 
     });
-    
-    if (this.storageService.isLoggedIn()) {
+    const isLogged = this.storageService.isLoggedIn();
+    if (isLogged) {
       console.log('✅ Usuario autenticado, permitiendo acceso'); // Debug
       return true;
     } else {
       console.log('❌ Usuario no autenticado, limpiando datos y redirigiendo a login'); // Debug
-      // Limpiar datos corruptos
-      this.storageService.logout();
-      this.router.navigate(['/login']);
+      await this.storageService.logout();
+      this.router.navigate(['/login'], { replaceUrl: true });
       return false;
     }
   }

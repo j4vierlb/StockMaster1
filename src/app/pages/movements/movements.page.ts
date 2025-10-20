@@ -42,12 +42,12 @@ export class MovementsPage implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+  async loadData() {
     this.isLoading = true;
     const userData = this.storageService.getUserData();
     
     this.products = this.storageService.getUserInventory(userData.id) || [];
-    this.movements = this.storageService.getItem(`movements_${userData.id}`) || [];
+    this.movements = await this.storageService.getItem(`movements_${userData.id}`) || [];
     
     // Generar algunos movimientos de ejemplo si no existen
     if (this.movements.length === 0) {

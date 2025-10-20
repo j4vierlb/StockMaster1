@@ -10,11 +10,10 @@ import { StorageService } from '../../services/storage.service';
   standalone: false
 })
 export class HomePage implements OnInit {
-  logout() {
-    // Usar el servicio para cerrar sesión
-    this.storageService.logout();
-    // Navegar al login
-    this.router.navigate(['/login']);
+  async logout() {
+    // Limpiar datos y redirigir al login de inmediato
+    await this.storageService.logout();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 
   goToAdvancedFeatures() {

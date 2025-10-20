@@ -57,10 +57,10 @@ export class LoginFormComponent implements OnInit {
         };
         
         // Obtener usuarios registrados desde localStorage
-        const registeredUsers = this.storageService.getItem('registeredUsers') || [];
-        const registeredUser = registeredUsers.find((user: any) => 
+        const registeredUsers = await this.storageService.getItem('registeredUsers') || [];
+        const registeredUser = Array.isArray(registeredUsers) ? registeredUsers.find((user: any) => 
           user.username.toLowerCase() === username.toLowerCase() && user.password === password
-        );
+        ) : null;
         
         // Verificar si es usuario predefinido
         const isValidPredefinedUser = validUsers[username.toLowerCase()] && validUsers[username.toLowerCase()] === password;
