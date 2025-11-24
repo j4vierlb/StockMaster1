@@ -19,8 +19,18 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+        cruncherEnabled = false
     }
 }
 

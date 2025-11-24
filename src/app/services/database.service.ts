@@ -283,9 +283,9 @@ export class DatabaseService {
         await this.db.close();
         this.isDbOpen = false;
         this.db = null;
-        console.log('✅ Base de datos cerrada correctamente');
+        console.log(' Base de datos cerrada correctamente');
       } catch (error) {
-        console.error('❌ Error cerrando base de datos:', error);
+        console.error(' Error cerrando base de datos:', error);
       }
     }
   }

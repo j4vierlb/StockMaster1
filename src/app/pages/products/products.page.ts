@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 import { StorageService } from '../../services/storage.service';
 import { CameraService } from '../../services/camera.service';
 import { ApiService } from '../../services/api.service';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'app-products',
@@ -39,7 +40,8 @@ export class ProductsPage implements OnInit {
     private toastController: ToastController,
     private storageService: StorageService,
     private cameraService: CameraService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private emailService: EmailService
   ) { }
 
   ngOnInit() {
@@ -57,9 +59,7 @@ export class ProductsPage implements OnInit {
     
     // Siempre cargar datos locales al inicializar
     this.loadLocalProducts();
-  }
-
-  // 🌐 MÉTODO MEJORADO PARA CARGAR PRODUCTOS DESDE API CON SQLITE
+  }  // 🌐 MÉTODO  PARA CARGAR PRODUCTOS DESDE API CON SQLITE
   private async loadProductsFromApi() {
     try {
       const loading = await this.loadingController.create({
@@ -111,7 +111,7 @@ export class ProductsPage implements OnInit {
           loading.dismiss();
           console.error('Error cargando desde API:', error);
           
-          // 🔄 FALLBACK: Cargar desde SQLite si API falla
+          // 🔄 FALLBACK: Cargar desde SQLite 
           const cachedProducts = await this.storageService.getItem('api_products_cache');
           if (cachedProducts && Array.isArray(cachedProducts)) {
             this.products = cachedProducts;
@@ -436,6 +436,9 @@ export class ProductsPage implements OnInit {
         // Recargar productos desde SQLite
         await this.loadLocalProducts();
         this.showToast('✅ Producto guardado en SQLite', 'success');
+        
+        // 📧 Enviar notificación por email
+        await this.sendProductNotificationEmail(newProduct);
       } else {
         // Fallback a localStorage
         const productWithId = {
@@ -449,6 +452,9 @@ export class ProductsPage implements OnInit {
         this.saveProductsLocal();
         this.filterProducts();
         this.showToast('💾 Producto guardado en localStorage', 'secondary');
+        
+        // 📧 Enviar notificación por email
+        await this.sendProductNotificationEmail(newProduct);
       }
       
       // Registrar actividad
@@ -661,7 +667,7 @@ export class ProductsPage implements OnInit {
     return this.filteredProducts.reduce((total, p) => total + (p.price * p.stock), 0);
   }
 
-  // 📸 FUNCIONALIDADES DE CÁMARA PARA PRODUCTOS
+  //  FUNCIONALIDADES DE CÁMARA PARA PRODUCTOS
   async addProductPhoto(productId: number) {
     try {
       const photoData = await this.cameraService.showImageOptions();
@@ -708,5 +714,40 @@ export class ProductsPage implements OnInit {
   // 🔧 MÉTODOS AUXILIARES QUE FALTABAN
   private generateBarcode(): string {
     return '789' + Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+  }
+
+  // 📧 Método para enviar notificación de nuevo producto por email
+  private async sendProductNotificationEmail(product: any) {
+    try {
+      const userData = this.storageService.getUserData();
+      const userName = userData?.fullName || userData?.username || 'Usuario';
+      const userEmail = userData?.email || 'no-reply@stockmaster.com';
+      
+      // Crear mensaje con información del producto
+      const productInfo = `
+Producto: ${product.name}
+Categoría: ${product.category}
+Stock: ${product.stock} unidades
+Precio: $${product.price}
+Ubicación: ${product.location}
+Descripción: ${product.description}
+      `.trim();
+      
+      // Enviar email usando el servicio
+      const result = await this.emailService.sendAttendanceEmail(
+        productInfo,
+        userName,
+        userEmail
+      );
+      
+      if (result.success) {
+        console.log('✅ Notificación de producto enviada por email');
+      } else {
+        console.warn('⚠️ No se pudo enviar notificación por email:', result.error);
+      }
+    } catch (error) {
+      console.error('❌ Error al enviar notificación por email:', error);
+      // No mostramos error al usuario para no interrumpir el flujo
+    }
   }
 }

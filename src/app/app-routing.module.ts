@@ -55,7 +55,7 @@ const routes: Routes = [
   // Ruta wildcard - debe ser la última
   {
     path: '**',
-    redirectTo: 'not-found'
+    loadChildren: () => import('./pages/not-found/notfound.module').then( m => m.NotfoundPageModule)
   }
 ];
 
@@ -63,8 +63,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { 
       preloadingStrategy: PreloadAllModules,
-      enableTracing: false, // Cambiar a true para debugging
-      onSameUrlNavigation: 'reload'
+      enableTracing: false,
+      useHash: false
     })
   ],
   exports: [RouterModule]

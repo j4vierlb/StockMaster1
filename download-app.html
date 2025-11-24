@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Descarga StockMaster - Sistema de Gestión de Inventario - Aplicación Híbrida">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="icon.png">
+    <title>Descargar StockMaster - Sistema de Gestión de Inventario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .logo svg {
+            width: 70px;
+            height: 70px;
+            fill: white;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .description {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .features {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .features h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            color: #4a5568;
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            font-weight: 600;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .qr-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .qr-section h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .qr-section p {
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .mobile-download {
+            display: none;
+        }
+
+        /* Desktop: mostrar QR */
+        @media (min-width: 769px) {
+            .qr-section {
+                display: block;
+            }
+            .mobile-download {
+                display: none;
+            }
+        }
+
+        /* Móvil: mostrar botón */
+        @media (max-width: 768px) {
+            .qr-section {
+                display: none;
+            }
+            .mobile-download {
+                display: block;
+            }
+        }
+
+        .file-info {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .instructions {
+            background: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #c53030;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            color: #4a5568;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #a0aec0;
+            font-size: 0.9em;
+        }
+
+        .version {
+            display: inline-block;
+            background: #edf2f7;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #4a5568;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .download-btn {
+                padding: 15px 40px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+            </svg>
+        </div>
+
+        <h1>StockMaster</h1>
+        <p class="subtitle">Sistema de Gestión de Inventario</p>
+        
+        <span class="version">Versión 1.0.0</span>
+
+        <div class="description">
+            <p>StockMaster es una aplicación móvil híbrida completa diseñada para gestionar tu inventario de productos de manera eficiente y profesional en dispositivos Android e iOS.</p>
+        </div>
+
+        <div class="features">
+            <h3>✨ Características principales</h3>
+            <ul>
+                <li>Gestión completa de productos e inventario</li>
+                <li>Autenticación segura de usuarios</li>
+                <li>Notificaciones automáticas por email</li>
+                <li>Recuperación de contraseña</li>
+                <li>Almacenamiento local con SQLite</li>
+                <li>Interfaz intuitiva y moderna</li>
+                <li>Soporte offline</li>
+            </ul>
+        </div>
+
+        <!-- Sección QR para escritorio -->
+        <div class="qr-section">
+            <h3>📱 Escanea para descargar</h3>
+            <p>Escanea este código QR con tu celular</p>
+            <img id="qr-code" alt="QR Code" class="qr-code">
+            <p style="font-size: 0.9em; color: #a0aec0;">O copia esta URL en tu celular:<br><code id="download-url" style="background: #f7fafc; padding: 5px 10px; border-radius: 5px; font-size: 0.85em;"></code></p>
+        </div>
+
+        <!-- Sección descarga para móvil -->
+        <div class="mobile-download">
+            <a href="http://192.168.100.124:8080/stockmaster-JJ-FINAL.apk" class="download-btn" download>
+                📥 Descargar APK
+            </a>
+
+            <div class="file-info">
+                Tamaño: ~28 MB | Compatibilidad: Android 7.0+ e iOS | Icono: JJ
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>⚠️ Instrucciones de instalación</h3>
+            <ol>
+                <li>Descarga el archivo <strong>stockmaster-JJ-FINAL.apk</strong></li>
+                <li>En tu dispositivo Android, ve a <strong>Configuración → Seguridad</strong></li>
+                <li>Activa la opción <strong>"Orígenes desconocidos"</strong> o <strong>"Instalar aplicaciones desconocidas"</strong></li>
+                <li>Abre el archivo APK descargado</li>
+                <li>Toca <strong>"Instalar"</strong> y espera a que termine</li>
+                <li>¡Listo! Abre StockMaster y comienza a gestionar tu inventario</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <p><strong>Desarrollado por:</strong> Javier Lara y Juan Bórquez</p>
+            <p><strong>Universidad:</strong> DUOC UC | Viña del Mar, Chile</p>
+            <p style="margin-top: 10px;">© 2025 StockMaster. Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+    <script>
+        // Genera el QR y la URL automáticamente con la IP actual
+        const currentUrl = window.location.origin + '/stockmaster-APP-PRODUCCION.apk';
+        document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(currentUrl);
+        document.getElementById('download-url').textContent = currentUrl;
+    </script>
+</body>
+</html>
