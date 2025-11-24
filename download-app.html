@@ -304,19 +304,19 @@
 
         <!-- Sección descarga para móvil -->
         <div class="mobile-download">
-            <a href="http://192.168.100.124:8080/stockmaster-JJ-FINAL.apk" class="download-btn" download>
+            <a href="stockmaster-APP-PRODUCCION-v1.1.apk" class="download-btn" download>
                 📥 Descargar APK
             </a>
 
             <div class="file-info">
-                Tamaño: ~28 MB | Compatibilidad: Android 7.0+ e iOS | Icono: JJ
+                Tamaño: ~28 MB | Compatibilidad: Android 7.0+ e iOS
             </div>
         </div>
 
         <div class="instructions">
             <h3>⚠️ Instrucciones de instalación</h3>
             <ol>
-                <li>Descarga el archivo <strong>stockmaster-JJ-FINAL.apk</strong></li>
+                <li>Descarga el archivo <strong>stockmaster-APP-PRODUCCION.apk</strong></li>
                 <li>En tu dispositivo Android, ve a <strong>Configuración → Seguridad</strong></li>
                 <li>Activa la opción <strong>"Orígenes desconocidos"</strong> o <strong>"Instalar aplicaciones desconocidas"</strong></li>
                 <li>Abre el archivo APK descargado</li>
@@ -334,7 +334,7 @@
 
     <script>
         // Genera el QR y la URL automáticamente con la IP actual
-        const currentUrl = window.location.origin + '/stockmaster-APP-PRODUCCION.apk';
+        const currentUrl = window.location.origin + '/stockmaster-APP-PRODUCCION-v1.1.apk';
         document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(currentUrl);
         document.getElementById('download-url').textContent = currentUrl;
     </script>
