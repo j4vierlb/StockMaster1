@@ -304,13 +304,16 @@
 
         <!-- Sección descarga para móvil -->
         <div class="mobile-download">
-            <a href="stockmaster-APP-PRODUCCION-v1.2.apk" class="download-btn" download>
-                📥 Descargar APK
+            <a href="https://github.com/user-attachments/files/23734720/stockmaster-APP-v1.2.zip" class="download-btn" download>
+                📥 Descargar APK (ZIP)
             </a>
 
             <div class="file-info">
-                Tamaño: ~28 MB | Compatibilidad: Android 7.0+ e iOS
+                Tamaño: ~16 MB (ZIP) | Compatibilidad: Android 7.0+
             </div>
+            <p style="font-size: 0.9em; color: #718096; margin-top: 10px;">
+                Descarga el ZIP, descomprímelo y ejecuta el archivo .apk
+            </p>
         </div>
 
         <div class="instructions">
@@ -333,8 +336,8 @@
     </div>
 
     <script>
-        // Genera el QR y la URL automáticamente con la IP actual
-        const currentUrl = window.location.origin + '/stockmaster-APP-PRODUCCION-v1.2.apk';
+        // Genera el QR y la URL automáticamente con la URL de GitHub Release
+        const currentUrl = 'https://github.com/user-attachments/files/23734720/stockmaster-APP-v1.2.zip';
         document.getElementById('qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(currentUrl);
         document.getElementById('download-url').textContent = currentUrl;
     </script>
